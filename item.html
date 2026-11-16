@@ -42,12 +42,14 @@ iframe{width:100%;height:280px;border:0;border-radius:12px;margin-top:8px}
 <script src="/js/data.js"></script>
 <script src="/js/common.js"></script>
 <script>
-var id = decodeURIComponent(location.pathname.replace(/^\/item\//,"").replace(/\/$/,""));
+var id = new URLSearchParams(location.search).get("id") || decodeURIComponent(location.pathname.replace(/^\/item\/?/,"").replace(/\/$/,""));
 var votes = {}, actVotes = {}, custom = [], liked = getJSON("liked-v2", []), actLikedList = getJSON("actliked-v1", []);
 
 function findItem(){
   var r = DATA.filter(function(d){ return d.id===id; })[0];
   if (r) return { kind:"rest", d:r };
+  var f = (typeof FOOD!=="undefined" ? FOOD : []).filter(function(x){ return x.id===id; })[0];
+  if (f) return { kind:"act", d:{id:f.id,name:f.name,cat:"comida",day:null,precio:f.precio,rec:f.rec,que:f.que,dist:f.dist,foto:f.foto,web:f.web,webq:f.webq} };
   var a = ACTIVITIES.filter(function(x){ return x.id===id; })[0];
   if (!a) a = custom.filter(function(c){ return c.id===id; })[0];
   if (a) return { kind:"act", d:a };
@@ -108,8 +110,8 @@ function renderAct(a){
 function renderMenu(){
   var root = document.getElementById("root");
   document.title = "Opciones · Navidad en Río";
-  var cenas = DATA.map(function(d){ return '<a class="opt" href="/item/'+encodeURIComponent(d.id)+'"><b>'+esc(d.name)+'</b><span>'+esc(d.tipo)+' · '+(d.precio==null?'precio por confirmar':'R$ '+d.precio.toLocaleString("es-AR")+(d.est?' est.':'')+' pp')+'</span></a>'; }).join("");
-  var acts = ACTIVITIES.concat(custom).map(function(a){ return '<a class="opt" href="/item/'+encodeURIComponent(a.id)+'"><b>'+esc(a.name)+'</b><span>'+esc(catLabel(a.cat))+(a.day?' · '+a.day+' dic':'')+(a.custom?' · sugerida':'')+'</span></a>'; }).join("");
+  var cenas = DATA.map(function(d){ return '<a class="opt" href="/item?id='+encodeURIComponent(d.id)+'"><b>'+esc(d.name)+'</b><span>'+esc(d.tipo)+' · '+(d.precio==null?'precio por confirmar':'R$ '+d.precio.toLocaleString("es-AR")+(d.est?' est.':'')+' pp')+'</span></a>'; }).join("");
+  var acts = ACTIVITIES.concat(custom).concat((typeof FOOD!=="undefined"?FOOD:[]).map(function(f){ return {id:f.id,name:f.name,cat:"comida",precio:f.precio,dist:f.dist}; })).map(function(a){ return '<a class="opt" href="/item?id='+encodeURIComponent(a.id)+'"><b>'+esc(a.name)+'</b><span>'+esc(catLabel(a.cat))+(a.day?' · '+a.day+' dic':'')+(a.custom?' · sugerida':'')+'</span></a>'; }).join("");
   root.innerHTML = '<h1 style="margin:0 0 6px">Elegí qué ver</h1><p class="note">Abrí el detalle completo de cualquier cena o actividad.</p>'
     + '<h2 class="sec-title">Cenas de Nochebuena</h2><div class="optgrid">'+cenas+'</div>'
     + '<h2 class="sec-title">Actividades</h2><div class="optgrid">'+acts+'</div>';

@@ -3,41 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Días y votos · Actividades Navidad en Río</title>
+<title>Calendario de votos · Navidad en Río</title>
 <link rel="stylesheet" href="/css/site.css">
+<style>
+.photo{height:130px;border-radius:12px;background:linear-gradient(135deg,#cfe7df,#f1e6cf);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--brand);font-weight:600;font-size:.88rem;border:1px dashed #9fc7bb}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.84rem}
+.facts div{background:var(--bg);border-radius:10px;padding:7px 10px}
+.facts b{display:block;color:var(--muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.4px}
+.dgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.dayrow{display:flex;gap:6px;flex-wrap:wrap}
+.dayrow .btn{padding:6px 10px;font-size:.82rem}
+.cols{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.cat-h{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:10px 14px 4px}
+</style>
 </head>
 <body>
 <header class="topbar"><div class="wrap">
   <a class="brand" href="/">Navidad en Río<small>Barra da Tijuca · 2026</small></a>
-  <nav class="menu">
-    <a href="/">Inicio</a><a href="/cena">Cena</a><a href="/actividades">Actividades</a><a class="on" href="/dias">Días y votos</a>
-  </nav>
+  <nav class="menu"><a href="/">Inicio</a><a href="/cena">Cena</a><a href="/actividades">Actividades</a><a class="on" href="/dias">Calendario</a></nav>
 </div></header>
 
 <section class="hero"><div class="wrap">
-  <h1>Calendario de actividades</h1>
-  <p>Indicá en qué día te gustaría hacer cada actividad. El calendario muestra las más votadas para cada día y se actualiza en vivo.</p>
+  <h1>Calendario del grupo</h1>
+  <p>Votá en qué día querés hacer cada actividad, almorzar o cenar. Cada día muestra lo más votado en cada categoría.</p>
   <div class="stats">
-    <div class="stat"><b id="st-days">0</b>votos por día</div>
+    <div class="stat"><b id="st-days">0</b>votos registrados</div>
     <div class="stat"><b id="st-mine">0</b>tus votos</div>
   </div>
 </div></section>
 
 <main class="wrap">
-  <h2 class="sec-title">Más votadas por día</h2>
+  <h2 class="sec-title">Lo más votado por día</h2>
   <div class="cal" id="cal"></div>
 
-  <h2 class="sec-title">Votá el día de cada actividad</h2>
+  <h2 class="sec-title">Votá el día de cada opción</h2>
   <div class="toolbar">
-    <div class="seg" id="cat-seg">
-      <button class="on" data-cat="all">Todas</button>
-      <button data-cat="playa">Playas y naturaleza</button>
-      <button data-cat="atraccion">Atracciones</button>
-      <button data-cat="excursion">Excursiones</button>
+    <div class="seg" id="kind-seg">
+      <button class="on" data-kind="all">Todo</button>
+      <button data-kind="act">Actividades</button>
+      <button data-kind="lunch">Almuerzo</button>
+      <button data-kind="dinner">Cena</button>
     </div>
-    <p class="note" style="margin:0">Un voto por actividad y día desde este navegador.</p>
+    <p class="note" style="margin:0">Un voto por opción y día desde este navegador.</p>
   </div>
-  <div class="grid" id="grid"></div>
+  <div class="dgrid" id="grid"></div>
 </main>
 
 <div class="toast" id="toast"></div>
@@ -47,21 +56,27 @@
 <script src="/js/common.js"></script>
 <script>
 var DAYS = [25,26,27,28,29];
-var ALL = ACTIVITIES.slice();
-var state = { cat: "all", dayvotes: {}, mine: getJSON("dayvoted-v1", []) };
+var ALL_ACT = ACTIVITIES.slice();
+var state = { kind: "all", dayvotes: {}, mine: getJSON("dayvoted-v1", []) };
 
+function items(){
+  var acts = ALL_ACT.map(function(a){ return {id:a.id,name:a.name,kind:"act",cat:a.cat,catLabel:catLabel(a.cat),dist:a.dist||(a.km!=null?"~"+a.km+" km":"Por confirmar"),precio:a.precio,rec:a.rec,que:a.que,foto:a.foto||("https://www.google.com/search?tbm=isch&q="+encodeURIComponent(a.name))}; });
+  var food = FOOD.map(function(f){ return {id:f.id,name:f.name,kind:(f.meal==="almuerzo"?"lunch":"dinner"),cat:"comida",catLabel:(f.meal==="almuerzo"?"Almuerzo":"Cena"),dist:f.dist,precio:f.precio,rec:f.rec,que:f.que,foto:f.foto,web:f.web}; });
+  return acts.concat(food);
+}
 function dv(id, d){ return state.dayvotes[id+"|"+d] || 0; }
+var KIND_TITLE = { act:"Actividades", lunch:"Almuerzo", dinner:"Cena" };
 
 function renderCalendar(){
+  var all = items();
   document.getElementById("cal").innerHTML = DAYS.map(function(d){
-    var ranked = ALL.map(function(a){ return {a:a, n:dv(a.id,d)}; })
-      .filter(function(x){ return x.n>0; })
-      .sort(function(x,y){ return y.n-x.n || x.a.name.localeCompare(y.a.name); })
-      .slice(0,3);
-    var body = ranked.length
-      ? '<ol>'+ranked.map(function(x){ return '<li><span>'+esc(x.a.name)+'</span><span class="n">'+x.n+'</span></li>'; }).join("")+'</ol>'
-      : '<div class="empty">Sin votos todavía</div>';
-    return '<div class="day"><header><b>'+d+' dic</b><span>'+['','','','','',''][0]+'Día '+(DAYS.indexOf(d)+1)+' de 5</span></header>'+body+'</div>';
+    var blocks = ["act","lunch","dinner"].map(function(k){
+      var ranked = all.filter(function(x){return x.kind===k;}).map(function(x){ return {x:x,n:dv(x.id,d)}; })
+        .filter(function(r){return r.n>0;}).sort(function(a,b){ return b.n-a.n || a.x.name.localeCompare(b.x.name); }).slice(0,3);
+      var body = ranked.length ? '<ol>'+ranked.map(function(r){ return '<li><span>'+esc(r.x.name)+'</span><span class="n">'+r.n+'</span></li>'; }).join("")+'</ol>' : '<div class="empty">Sin votos</div>';
+      return '<div class="cat-h">'+KIND_TITLE[k]+'</div>'+body;
+    }).join("");
+    return '<div class="day"><header><b>'+d+' dic</b><span>Día '+(DAYS.indexOf(d)+1)+' de 5</span></header>'+blocks+'</div>';
   }).join("");
   var total = 0; for (var k in state.dayvotes) total += state.dayvotes[k];
   document.getElementById("st-days").textContent = total;
@@ -69,20 +84,21 @@ function renderCalendar(){
 }
 
 function renderGrid(){
-  var list = ALL.filter(function(a){ return state.cat==="all" || a.cat===state.cat; });
-  document.getElementById("grid").innerHTML = list.map(function(a){
-    var chips = DAYS.map(function(d){
-      var key = a.id+"|"+d, voted = state.mine.indexOf(key)!==-1;
-      return '<button class="btn" data-day="'+d+'" data-id="'+esc(a.id)+'" '+(voted?'disabled':'')+' style="'+(voted?'background:var(--brand-2);border-color:var(--brand);color:var(--brand)':'')+'">'+d+' <span class="count">· '+dv(a.id,d)+'</span></button>';
+  var list = items().filter(function(x){ return state.kind==="all" || (state.kind==="act"&&x.kind==="act") || (state.kind==="lunch"&&x.kind==="lunch") || (state.kind==="dinner"&&x.kind==="dinner"); });
+  document.getElementById("grid").innerHTML = list.map(function(x){
+    var btns = DAYS.map(function(d){
+      var voted = state.mine.indexOf(x.id+"|"+d)!==-1;
+      return '<button class="btn" data-day="'+d+'" data-id="'+esc(x.id)+'" '+(voted?'disabled':'')+' style="'+(voted?'background:var(--brand-2);border-color:var(--brand);color:var(--brand)':'')+'">'+d+' · '+dv(x.id,d)+'</button>';
     }).join("");
-    return '<article class="card" id="'+esc(a.id)+'">'
-      + '<div class="chips"><span class="chip cat-'+esc(a.cat)+'">'+esc(catLabel(a.cat))+'</span></div>'
-      + '<h3>'+esc(a.name)+'</h3>'
-      + '<p class="desc">'+esc(a.que)+'</p>'
-      + (a.rec?'<p class="note" style="margin:0">Recomendado para: '+esc(a.rec)+'</p>':'')
-      + '<p class="note" style="margin:0">¿Qué día te gustaría ir?</p>'
-      + '<div class="actions" style="gap:6px">'+chips+'</div>'
-      + '<div class="actions" style="border-top:0;padding-top:0"><button class="btn ghost" data-share="'+esc(a.id)+'">Compartir</button><a class="btn ghost" href="/actividades#'+esc(a.id)+'">Ver detalle</a></div>'
+    return '<article class="card" id="'+esc(x.id)+'">'
+      + '<div class="chips"><span class="chip '+(x.kind==="act"?'cat-'+esc(x.cat):'day')+'">'+esc(x.catLabel)+'</span></div>'
+      + '<a class="photo" href="'+esc(x.foto)+'" target="_blank" rel="noopener">Ver fotos</a>'
+      + '<h3>'+esc(x.name)+'</h3>'
+      + '<div class="facts"><div><b>Distancia</b>'+esc(x.dist)+'</div><div><b>Precio</b>'+esc(x.precio||'—')+'</div></div>'
+      + (x.rec?'<p class="note" style="margin:0">'+esc(x.rec)+'</p>':'')
+      + '<p class="desc">'+esc(x.que)+'</p>'
+      + '<div class="dayrow">'+btns+'</div>'
+      + '<div class="actions" style="border-top:0;padding-top:4px"><button class="btn ghost" data-share="'+esc(x.id)+'">Compartir</button><a class="btn ghost" href="/item?id='+encodeURIComponent(x.id)+'">Ver detalle</a></div>'
       + '</article>';
   }).join("");
 }
@@ -97,24 +113,21 @@ function vote(id, d, btn){
     }).catch(function(){ btn.disabled=false; toast("No se pudo registrar el voto"); });
 }
 
-document.getElementById("cat-seg").addEventListener("click", function(e){
-  var b = e.target.closest("button[data-cat]"); if(!b) return;
-  state.cat = b.getAttribute("data-cat");
-  document.querySelectorAll("#cat-seg button").forEach(function(x){ x.classList.toggle("on", x===b); });
+document.getElementById("kind-seg").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-kind]"); if(!b) return;
+  state.kind = b.getAttribute("data-kind");
+  document.querySelectorAll("#kind-seg button").forEach(function(x){ x.classList.toggle("on", x===b); });
   renderGrid();
 });
 document.getElementById("grid").addEventListener("click", function(e){
   var v = e.target.closest("[data-day]"); if (v) { vote(v.getAttribute("data-id"), Number(v.getAttribute("data-day")), v); return; }
-  var s = e.target.closest("[data-share]"); if (s) {
-    var a = ALL.filter(function(x){return x.id===s.getAttribute("data-share");})[0];
-    if (a) shareLink(a.id, a.name);
-  }
+  var s = e.target.closest("[data-share]"); if (s) { var id = s.getAttribute("data-share"); shareLink(id, id); }
 });
 
 renderCalendar(); renderGrid();
 fetch(API).then(function(r){return r.json();}).then(function(d){
   state.dayvotes = d.dayvotes || {};
-  ALL = ACTIVITIES.concat((d.actcustom || []).map(function(c){ return {id:c.id,name:c.name,cat:c.cat,day:c.day,que:c.que||'',precio:c.precio||'',rec:c.rec||''}; }));
+  ALL_ACT = ACTIVITIES.concat((d.actcustom || []).map(function(c){ return {id:c.id,name:c.name,cat:c.cat,day:c.day,que:c.que||"",precio:c.precio||"Consultar",rec:c.rec||"",dist:"Por confirmar",foto:""}; }));
   renderCalendar(); renderGrid();
 }).catch(function(){ toast("No se pudieron cargar los votos"); });
 </script>
