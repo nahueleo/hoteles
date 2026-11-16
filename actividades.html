@@ -23,6 +23,7 @@
 .msg{font-size:.88rem;color:var(--muted);margin-top:10px;min-height:1.2em}
 .dayrow{display:flex;gap:6px;flex-wrap:wrap}
 .dayrow .btn{padding:6px 10px;font-size:.82rem}
+.photo-img{width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;background:#eef3f1}
 </style>
 </head>
 <body>
@@ -123,7 +124,7 @@ function card(a){
   }).join("");
   return '<article class="card" id="'+esc(a.id)+'">'
     + '<div class="chips"><span class="chip cat-'+esc(a.cat)+'">'+esc(catLabel(a.cat))+'</span>'+(a.custom?'<span class="badge-u">Sugerida por el grupo</span>':'')+'</div>'
-    + '<a class="photo" href="'+esc(a.foto)+'" target="_blank" rel="noopener">Ver fotos de '+esc(a.name)+'</a>'
+    + (a.img ? '<img class="photo-img" src="'+esc(a.img)+'" alt="'+esc(a.name)+'" loading="lazy">' : '<a class="photo" href="'+esc(a.foto)+'" target="_blank" rel="noopener">Ver fotos de '+esc(a.name)+'</a>')
     + '<h3>'+esc(a.name)+'</h3>'
     + '<div class="facts">'
     +   '<div><b>Distancia</b>'+esc(a.dist||(a.km!=null?'~'+a.km+' km':'Por confirmar'))+'</div>'

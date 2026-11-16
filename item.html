@@ -90,7 +90,8 @@ function renderAct(a){
   var n = actVotes[a.id]||0;
   var dist = a.dist || (a.km!=null ? "~"+a.km+" km" : "Por confirmar");
   var foto = a.foto || ("https://www.google.com/search?tbm=isch&q="+encodeURIComponent(a.name));
-  return '<article class="item"><a class="cover" href="'+esc(foto)+'" target="_blank" rel="noopener">Ver fotos de '+esc(a.name)+'</a>'
+  var cover = a.img ? '<img src="'+esc(a.img)+'" alt="'+esc(a.name)+'">' : 'Ver fotos de '+esc(a.name);
+  return '<article class="item"><a class="cover" href="'+esc(a.img?a.img:foto)+'" target="_blank" rel="noopener">'+cover+'</a>'
     + '<div class="body">'
     + '<div class="chips">'+(a.day?'<span class="chip day">'+a.day+' de diciembre</span>':'<span class="chip day">Día por definir</span>')+'<span class="chip cat-'+esc(a.cat)+'">'+esc(catLabel(a.cat))+'</span>'+(a.custom?'<span class="badge-u">Sugerida por el grupo</span>':'')+'</div>'
     + '<h1>'+esc(a.name)+'</h1>'
