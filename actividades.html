@@ -94,6 +94,7 @@
       <button data-f="playa">Playas</button>
       <button data-f="atraccion">Atracciones</button>
       <button data-f="excursion">Excursiones</button>
+      <button data-f="lluvia">Si llueve</button>
       <button data-f="lunch">Almuerzo</button>
       <button data-f="dinner">Cena</button>
     </div>
@@ -147,7 +148,7 @@ var ICON = {
   mount:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20l6-10 4 6 3-4 5 8z"/></svg>',
   bus:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="15" rx="2"/><path d="M4 11h16M8 21l-1-3M16 21l1-3"/></svg>'
 };
-var CAT_ICON = { playa:ICON.beach, atraccion:ICON.mount, excursion:ICON.bus, comida:ICON.food };
+var CAT_ICON = { playa:ICON.beach, atraccion:ICON.mount, excursion:ICON.bus, comida:ICON.food, lluvia:ICON.camera };
 var DAYS = [26,27,28,29];
 var KIND_TITLE = { act:"Actividades", lunch:"Almuerzo", dinner:"Cena" };
 var state = { f:"all", sort:"votes", dayvotes:{}, votes:{}, custom:[], actcustom:[],
