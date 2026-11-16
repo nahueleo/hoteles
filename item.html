@@ -31,7 +31,7 @@ iframe{width:100%;height:280px;border:0;border-radius:12px;margin-top:8px}
 <body>
 <header class="topbar"><div class="wrap">
   <a class="brand" href="/">Navidad en Río<small>Barra da Tijuca · 2026</small></a>
-  <nav class="menu"><a href="/">Inicio</a><a href="/cena">Cena</a><a href="/actividades">Actividades</a><a href="/dias">Días y votos</a></nav>
+  <nav class="menu"><a href="/">Inicio</a><a href="/cena">Cena Navidad</a><a href="/actividades">Actividades y comidas</a></nav>
 </div></header>
 <main class="wrap" style="padding-top:24px;padding-bottom:50px">
   <div id="root"><p class="note">Cargando…</p></div>
@@ -40,6 +40,7 @@ iframe{width:100%;height:280px;border:0;border-radius:12px;margin-top:8px}
 <footer class="footer">Datos del grupo · actualizado el 16/11/2026</footer>
 
 <script src="/js/data.js"></script>
+<script src="/js/zona.js"></script>
 <script src="/js/common.js"></script>
 <script>
 var id = String(new URLSearchParams(location.search).get("id") || decodeURIComponent(location.pathname.replace(/^\/item\/?/,"").replace(/\/$/,""))).split(/\s/)[0];
@@ -102,7 +103,7 @@ function renderAct(a){
     + '<div class="row">'
     +   '<button class="btn primary" data-avote="'+esc(a.id)+'" '+(voted?'disabled':'')+'>'+(voted?'✓ Votado':'Votar')+' · '+n+'</button>'
     +   '<button class="btn" id="share">Compartir</button>'
-    +   '<a class="btn ghost" href="/dias#'+esc(a.id)+'">Elegir día</a>'
+    +   '<a class="btn ghost" href="/actividades#'+esc(a.id)+'">Elegir día</a>'
     +   ((a.web||a.webq)?'<a class="btn ghost" href="'+esc(a.web||a.webq)+'" target="_blank" rel="noopener">'+(a.web?'Sitio web':'Buscar web')+'</a>':'')
     +   '<a class="btn ghost" href="/actividades">← Volver a actividades</a>'
     + '</div></div></article>';
@@ -142,12 +143,12 @@ function render(){
   });
 }
 
-if (!id) { renderMenu(); } else { render(); }
+if (!id) { location.replace("/actividades"); } else { render(); }
 fetch(API).then(function(r){return r.json();}).then(function(d){
   votes = d.likes||{}; actVotes = d.actlikes||{}; custom = (d.actcustom||[]).map(function(c){
     return {id:c.id,name:c.name,cat:c.cat,day:c.day,precio:c.precio||"Consultar",rec:c.rec||"Todos",que:c.que||"",custom:true,web:c.link||"",foto:"",webq:"https://www.google.com/search?q="+encodeURIComponent(c.name)};
   });
-  if (!id) renderMenu(); else render();
+  if (!id) location.replace("/actividades"); else render();
 }).catch(function(){ toast("No se pudieron cargar los votos"); });
 </script>
 </body>
