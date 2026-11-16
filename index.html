@@ -68,6 +68,13 @@
   .act-day { margin:18px 0 6px; font-size:1.1rem; }
   .act-grid { display:grid; gap:12px; grid-template-columns:1fr; }
   @media (min-width:700px){ .act-grid { grid-template-columns:1fr 1fr; } }
+  .hl { outline:3px solid var(--accent); outline-offset:2px; }
+  .sharebtn { border:1px solid var(--accent); background:#fff; color:var(--accent); border-radius:10px; padding:7px 12px; font-weight:600; font-size:.85rem; cursor:pointer; }
+  #modal { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:flex-start; justify-content:center; padding:20px 12px; overflow:auto; z-index:50; }
+  #modal.open { display:flex; }
+  #modal .box { background:#fff; border-radius:16px; max-width:680px; width:100%; position:relative; }
+  #modal .close { position:absolute; top:8px; right:10px; border:0; background:#fff; border-radius:999px; width:34px; height:34px; font-size:18px; cursor:pointer; z-index:2; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+  #toast { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:#222; color:#fff; padding:10px 16px; border-radius:10px; font-size:.9rem; display:none; z-index:60; }
   @media (max-width:520px){ .card .photo { height:150px; } }
 </style>
 </head>
@@ -193,6 +200,9 @@
 
 </main>
 
+<div id="modal"><div class="box"><button class="close" id="modal-close" aria-label="Cerrar">×</button><div id="modal-body"></div></div></div>
+<div id="toast"></div>
+
 <footer>Datos recopilados el 16/11/2026 desde Google, webs oficiales, Sympla, Instagram y WhatsApp.</footer>
 
 <script>
@@ -221,6 +231,7 @@ function renderActivities(){
         + '<a class="btn alt" href="'+esc(a.foto)+'" target="_blank" rel="noopener">Fotos</a>'
         + '<a class="btn alt" href="'+esc(a.igq)+'" target="_blank" rel="noopener">Instagram</a>'
         + '<a class="btn alt" href="'+esc(a.web||a.webq)+'" target="_blank" rel="noopener">'+(a.web?'Web':'Buscar web')+'</a>'
+        + '<button class="sharebtn" data-share="'+a.id+'">Compartir</button>'
         + '<button class="btn" '+(voted?'disabled':'')+' onclick="actLike(\''+a.id+'\', this)">'+(voted?'Votado':'Votar')+' ('+(actVotes[a.id]||0)+')</button>'
         + '</div></div></div>';
     }).join('') + '</div>';
@@ -345,6 +356,7 @@ function renderCards(rows){
       + '<div class="row">'
       + (d.src? '<a class="btn" href="'+esc(d.src)+'" target="_blank" rel="noopener">Fuente</a>':'')
       + (d.ig? '<a class="btn alt" href="'+esc(d.ig)+'" target="_blank" rel="noopener">Instagram</a>':'')
+      + '<button class="sharebtn" data-share="'+d.id+'">Compartir</button>'
       + '<span class="note">Reserva: '+esc(d.res)+'</span></div>'
       + '<details class="map"><summary>Ver mapa</summary><iframe loading="lazy" src="https://www.google.com/maps?q='+mapq+'&amp;output=embed"></iframe></details>'
       + '</div></div>';
@@ -415,7 +427,7 @@ function loadAll(){
     if (overrides.general) {
       document.getElementById("general-notes").innerHTML = '<div class="card"><div class="body"><h3>Actualizaciones</h3><p class="note" style="white-space:pre-line;margin:0">'+esc(overrides.general)+'</p></div></div>';
     }
-    renderAll(); renderCustom(d.custom||[]); renderActivities();
+    renderAll(); renderCustom(d.custom||[]); renderActivities(); openFromHash();
   }).catch(function(){ renderAll(); renderActivities(); document.getElementById("status").textContent="No se pudieron cargar los datos del grupo."; });
 }
 
@@ -435,6 +447,48 @@ document.getElementById("share-btn").addEventListener("click", function(){
 ["f-cena","f-tipo"].forEach(function(id){ document.getElementById(id).addEventListener("change", renderAll); });
 ["af-day","af-cat"].forEach(function(id){ document.getElementById(id).addEventListener("change", renderActivities); });
 initTipoFilter();
+
+function toast(t){ var el=document.getElementById("toast"); el.textContent=t; el.style.display="block"; clearTimeout(toast._t); toast._t=setTimeout(function(){ el.style.display="none"; },2200); }
+function itemUrl(id){ return location.origin + location.pathname + "#" + id; }
+function shareItem(id){
+  var url = itemUrl(id);
+  var title = (ACTIVITIES.filter(function(a){return a.id===id;})[0] || DATA.filter(function(d){return d.id===id;})[0] || {}).name || "Nochebuena";
+  if (navigator.share) { navigator.share({ title: title, text: "Mira esta opción para Nochebuena / Navidad en Río", url: url }).catch(function(){}); return; }
+  if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function(){ toast("Link copiado"); }, function(){ toast(url); }); }
+  else { toast(url); }
+}
+function closeModal(){ document.getElementById("modal").classList.remove("open"); history.replaceState(null,"",location.pathname+location.search); }
+function openItem(id){
+  var el = document.querySelector('[data-id="'+id+'"]') || document.querySelector('[data-act="'+id+'"]');
+  if (!el) return false;
+  document.querySelectorAll(".hl").forEach(function(x){ x.classList.remove("hl"); });
+  el.classList.add("hl");
+  var body = document.getElementById("modal-body");
+  body.innerHTML = el.outerHTML;
+  body.querySelectorAll("[data-share]").forEach(function(b){ b.addEventListener("click", function(){ shareItem(b.getAttribute("data-share")); }); });
+  body.querySelectorAll("[data-like]").forEach(function(b){ b.addEventListener("click", function(){ like(b.getAttribute("data-like"), b); }); });
+  document.getElementById("modal").classList.add("open");
+  return true;
+}
+function openFromHash(){
+  var id = decodeURIComponent((location.hash||"").replace(/^#/,""));
+  if (!id) return;
+  var known = ACTIVITIES.some(function(a){return a.id===id;}) || DATA.some(function(d){return d.id===id;});
+  if (!known) return;
+  setTimeout(function(){
+    var el = document.querySelector('[data-id="'+id+'"]') || document.querySelector('[data-act="'+id+'"]');
+    if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    openItem(id);
+  }, 150);
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest && e.target.closest("[data-share]");
+  if (b) { shareItem(b.getAttribute("data-share")); }
+});
+document.getElementById("modal-close").addEventListener("click", closeModal);
+document.getElementById("modal").addEventListener("click", function(e){ if (e.target.id==="modal") closeModal(); });
+document.addEventListener("keydown", function(e){ if (e.key==="Escape") closeModal(); });
+window.addEventListener("hashchange", openFromHash);
 document.querySelectorAll("th[data-k]").forEach(function(th){
   th.addEventListener("click", function(){
     var k = th.getAttribute("data-k"); if(k==="rank") k="score";
