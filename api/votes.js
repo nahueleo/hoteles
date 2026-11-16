@@ -61,8 +61,9 @@ module.exports = async (req, res) => {
       if (!TOKEN_ADMIN) return res.status(500).json({ error: "Falta configurar ADMIN_TOKEN en Vercel." });
       if (body.token !== TOKEN_ADMIN) return res.status(401).json({ error: "Clave incorrecta" });
       const incoming = body.content && typeof body.content === "object" ? body.content : {};
-      const clean2 = {};
+      const clean2 = { general: clean(incoming.general, 4000) };
       for (const id of Object.keys(incoming)) {
+        if (id === "general") continue;
         if (!ALLOWED.has(id)) continue;
         clean2[id] = { price: clean(incoming[id].price, 300), note: clean(incoming[id].note, 600) };
       }
