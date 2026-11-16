@@ -4,100 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nochebuena en Barra da Tijuca · 24/12/2026</title>
+<link rel="stylesheet" href="/css/site.css">
 <style>
-  :root { color-scheme: light; --ink:#1d2430; --muted:#5b6675; --line:#e3e7ee; --bg:#f6f7f9; --accent:#1f6f5c; --gold:#b7791f; }
-  * { box-sizing: border-box; }
-  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; color:var(--ink); background:var(--bg); line-height:1.45; }
-  header { background:linear-gradient(135deg,#1f6f5c,#2f8f76); color:#fff; padding:22px 16px 18px; }
-  header h1 { margin:0 0 4px; font-size:1.35rem; }
-  header p { margin:0; opacity:.92; font-size:.9rem; }
-  nav { position:sticky; top:0; z-index:5; background:#fff; border-bottom:1px solid var(--line); overflow-x:auto; white-space:nowrap; }
-  nav a { display:inline-block; padding:12px 14px; color:var(--accent); text-decoration:none; font-weight:600; font-size:.86rem; }
-  main { max-width:900px; margin:0 auto; padding:12px; }
-  h2 { font-size:1.15rem; margin:20px 0 10px; }
-  .card { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:14px; }
-  .card .photo { display:block; width:100%; height:180px; object-fit:cover; background:#e9edf2; }
-  .body { padding:12px 14px 14px; }
-  .card h3 { margin:0 0 4px; font-size:1.02rem; }
-  .meta { color:var(--muted); font-size:.85rem; margin:2px 0 8px; }
-  .price { font-size:.9rem; margin:6px 0; }
-  .price b { color:var(--gold); }
-  .badge { display:inline-block; font-size:.72rem; padding:3px 9px; border-radius:999px; background:#eef5f2; color:var(--accent); margin:2px 4px 2px 0; font-weight:600; }
-  .badge.hotel { background:#fdf3e1; color:var(--gold); }
-  .badge.est { background:#f1f1f4; color:var(--muted); }
-  .row { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
-  .btn { display:inline-block; padding:8px 12px; border-radius:10px; background:var(--accent); color:#fff; text-decoration:none; font-size:.85rem; font-weight:600; border:0; cursor:pointer; }
-  .btn.alt { background:#fff; color:var(--accent); border:1px solid var(--accent); }
-  .btn[disabled] { opacity:.6; cursor:default; }
-  .btn.on { background:var(--accent); color:#fff; }
-  .likebtn { border:1px solid var(--accent); background:#fff; color:var(--accent); border-radius:999px; padding:7px 14px; font-weight:600; font-size:.85rem; cursor:pointer; }
-  .likebtn.on { background:var(--accent); color:#fff; }
-  .likebtn[disabled] { opacity:.7; cursor:default; }
-  .note { font-size:.8rem; color:var(--muted); margin-top:6px; }
-  details.map { margin-top:10px; }
-  details.map summary { cursor:pointer; color:var(--accent); font-weight:600; font-size:.86rem; }
-  details.map iframe { width:100%; height:230px; border:0; border-radius:10px; margin-top:8px; }
-  /* resumen */
-  .winners { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; }
-  .win { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
-  .win small { color:var(--muted); font-size:.74rem; text-transform:uppercase; letter-spacing:.03em; font-weight:700; }
-  .win b { display:block; font-size:.98rem; margin-top:4px; }
-  .win span { font-size:.8rem; color:var(--muted); }
-  .win.best { border-color:var(--accent); box-shadow:0 0 0 2px #dff0ea inset; }
-  /* tabla */
-  .tablewrap { overflow-x:auto; background:#fff; border:1px solid var(--line); border-radius:12px; }
-  table { border-collapse:collapse; width:100%; min-width:780px; font-size:.86rem; }
-  th, td { padding:9px 8px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
-  th { background:#f0f3f7; font-size:.74rem; text-transform:uppercase; color:var(--muted); cursor:pointer; user-select:none; }
-  th.sorted::after { content:" ▼"; }
-  th.sorted.asc::after { content:" ▲"; }
-  td.num { text-align:right; font-variant-numeric:tabular-nums; }
-  tr.top td { background:#f4faf7; }
-  .score { font-weight:700; color:var(--accent); }
-  /* controles */
-  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
-  .controls label { font-size:.8rem; color:var(--muted); display:block; }
-  .controls input[type=range] { width:100%; }
-  .controls select { width:100%; padding:8px; border-radius:8px; border:1px solid var(--line); font:inherit; }
-  .addbox { background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin:14px 0; }
-  .addbox input, .addbox textarea { width:100%; padding:10px; border:1px solid var(--line); border-radius:10px; font:inherit; margin-top:6px; }
-  .addbox button { margin-top:10px; background:var(--accent); color:#fff; border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; }
-  .custom-tag { font-size:.75rem; color:var(--gold); font-weight:600; }
-  #status { font-size:.85rem; color:var(--muted); margin-top:6px; }
-  footer { text-align:center; color:var(--muted); font-size:.78rem; padding:20px 14px 36px; }
-  .act-day { margin:18px 0 6px; font-size:1.1rem; }
-  .act-grid { display:grid; gap:12px; grid-template-columns:1fr; }
-  @media (min-width:700px){ .act-grid { grid-template-columns:1fr 1fr; } }
-  .hl { outline:3px solid var(--accent); outline-offset:2px; }
-  .sharebtn { border:1px solid var(--accent); background:#fff; color:var(--accent); border-radius:10px; padding:7px 12px; font-weight:600; font-size:.85rem; cursor:pointer; }
-  #modal { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:flex-start; justify-content:center; padding:20px 12px; overflow:auto; z-index:50; }
-  #modal.open { display:flex; }
-  #modal .box { background:#fff; border-radius:16px; max-width:680px; width:100%; position:relative; }
-  #modal .close { position:absolute; top:8px; right:10px; border:0; background:#fff; border-radius:999px; width:34px; height:34px; font-size:18px; cursor:pointer; z-index:2; box-shadow:0 1px 4px rgba(0,0,0,.2); }
-  #toast { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:#222; color:#fff; padding:10px 16px; border-radius:10px; font-size:.9rem; display:none; z-index:60; }
-  @media (max-width:520px){ .card .photo { height:150px; } }
+  /* compat for restaurant cards and table, aligned to the site palette */
+  main.wrap{max-width:1120px;margin:0 auto;padding:24px 18px 60px}
+  h2{font-size:1.15rem;margin:30px 0 12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px}
+  .card .photo{display:block;width:100%;height:180px;object-fit:cover;background:#eef3f1}
+  .body{padding:14px 16px 16px}
+  .card h3{margin:2px 0 4px;font-size:1.05rem}
+  .badge{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--brand-2);color:var(--brand);text-transform:uppercase;letter-spacing:.3px}
+  .badge.est{background:#fdf3e1;color:var(--gold)}
+  .badge.hotel{background:#e8eefc;color:#2b4fa0}
+  .price{font-size:.95rem;margin:4px 0}
+  .meta,.note{color:var(--muted);font-size:.86rem}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  .btn{font:inherit;font-size:.85rem;font-weight:600;border-radius:10px;padding:8px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .btn.alt{border-color:var(--brand);color:var(--brand)}
+  .likebtn{border:1px solid var(--brand);background:#fff;color:var(--brand);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.85rem;cursor:pointer}
+  .likebtn.on{background:var(--brand);color:#fff}
+  .likebtn[disabled]{opacity:.7;cursor:default}
+  .map{margin-top:10px;font-size:.86rem}
+  .map iframe{width:100%;height:220px;border:0;border-radius:12px;margin-top:8px}
+  .tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{padding:10px 12px;border-bottom:1px solid #eef2f0;text-align:left;white-space:nowrap}
+  th{background:#f7faf9;font-size:.76rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);cursor:pointer}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  tr.top td{background:#f1f9f6}
+  .controls{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+  .controls label{font-size:.84rem;color:var(--muted);font-weight:600;display:block}
+  .controls input[type=range]{width:100%}
+  .controls select{width:100%;padding:8px;border-radius:10px;border:1px solid var(--line);font:inherit}
+  .winners{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-bottom:12px}
+  .winners .card{margin:0}
+  .addbox{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:14px 0}
+  .addbox input,.addbox textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;margin-top:6px}
+  .addbox button{margin-top:10px;background:var(--brand);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+  .custom-tag{font-size:.72rem;color:var(--gold);font-weight:700}
+  #status{font-size:.85rem;color:var(--muted);margin-top:6px}
+  @media (max-width:560px){.card .photo{height:150px}}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Cena de Nochebuena · Barra da Tijuca</h1>
-  <p>24 de diciembre de 2026 · 8 adultos y 7 niños · precios y datos al 16/11/2026</p>
-</header>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="/">Navidad en Río<small>Barra da Tijuca · 2026</small></a>
+  <nav class="menu">
+    <a href="/">Inicio</a><a class="on" href="/cena">Cena</a><a href="/actividades">Actividades</a><a href="/dias">Calendario</a>
+  </nav>
+</div></header>
 
-<div style="text-align:center;margin:10px 0 0"><button id="share-btn" style="background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer">Compartir esta página</button> <span id="share-msg" style="font-size:.85rem;color:var(--muted)"></span></div>
-<nav>
-  <a href="/">Inicio</a>
-  <a href="#resumen">Resumen</a>
-  <a href="#tabla">Tabla</a>
-  <a href="#opciones">Opciones</a>
-  <a href="/actividades">Actividades</a>
-  <a href="/dias">Días y votos</a>
-  <a href="#agregar">Agregar</a>
-  <a href="#notas">Notas</a>
-</nav>
+<section class="hero"><div class="wrap">
+  <h1>Cena de Nochebuena · 24 de diciembre</h1>
+  <p>Comparativo de restaurantes y ceias: precio por persona, total del grupo, distancia, opciones para niños y estado de la respuesta. Votá y compartí cada opción.</p>
+  <div class="stats">
+    <div class="stat"><b>8 adultos · 7 niños</b>Grupo</div>
+    <div class="stat"><b>Hotel Laghetto</b>Rua Marcelo Roberto, 65</div>
+  </div>
+</div></section>
+<div class="wrap" style="padding-top:14px;text-align:right"><button id="share-btn" class="btn primary" style="background:var(--brand);color:#fff;border-color:var(--brand)">Compartir esta página</button> <span id="share-msg" class="note"></span></div>
+<div class="wrap" style="padding-top:14px"><nav class="menu" style="flex-wrap:wrap">
+  <a href="#resumen">Resumen</a><a href="#tabla">Comparativo</a><a href="#opciones">Opciones</a><a href="#agregar">Sugerir</a><a href="#notas">Notas</a>
+</nav></div>
 
-<main>
+<main class="wrap">
 
 <section id="resumen">
   <h2>Resumen</h2>
@@ -183,7 +154,8 @@
 <div id="modal"><div class="box"><button class="close" id="modal-close" aria-label="Cerrar">×</button><div id="modal-body"></div></div></div>
 <div id="toast"></div>
 
-<footer>Datos recopilados el 16/11/2026 desde Google, webs oficiales, Sympla, Instagram y WhatsApp.</footer>
+
+<footer class="footer">Datos recopilados el 16/11/2026 desde Google, webs oficiales, Sympla, Instagram y WhatsApp.</footer>
 
 <script src="/js/data.js"></script>
 <script>
@@ -427,7 +399,7 @@ document.getElementById("share-btn").addEventListener("click", function(){
 initTipoFilter();
 
 function toast(t){ var el=document.getElementById("toast"); el.textContent=t; el.style.display="block"; clearTimeout(toast._t); toast._t=setTimeout(function(){ el.style.display="none"; },2200); }
-function itemUrl(id){ return location.origin + "/item/" + encodeURIComponent(id); }
+function itemUrl(id){ return location.origin + "/item?id=" + encodeURIComponent(id); }
 function shareItem(id){
   var url = itemUrl(id);
   var title = (ACTIVITIES.filter(function(a){return a.id===id;})[0] || DATA.filter(function(d){return d.id===id;})[0] || {}).name || "Nochebuena";
