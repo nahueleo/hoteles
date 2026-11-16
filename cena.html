@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nochebuena en Barra da Tijuca · 24/12/2026</title>
+<style>
+  :root { color-scheme: light; --ink:#1d2430; --muted:#5b6675; --line:#e3e7ee; --bg:#f6f7f9; --accent:#1f6f5c; --gold:#b7791f; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; color:var(--ink); background:var(--bg); line-height:1.45; }
+  header { background:linear-gradient(135deg,#1f6f5c,#2f8f76); color:#fff; padding:22px 16px 18px; }
+  header h1 { margin:0 0 4px; font-size:1.35rem; }
+  header p { margin:0; opacity:.92; font-size:.9rem; }
+  nav { position:sticky; top:0; z-index:5; background:#fff; border-bottom:1px solid var(--line); overflow-x:auto; white-space:nowrap; }
+  nav a { display:inline-block; padding:12px 14px; color:var(--accent); text-decoration:none; font-weight:600; font-size:.86rem; }
+  main { max-width:900px; margin:0 auto; padding:12px; }
+  h2 { font-size:1.15rem; margin:20px 0 10px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:14px; }
+  .card .photo { display:block; width:100%; height:180px; object-fit:cover; background:#e9edf2; }
+  .body { padding:12px 14px 14px; }
+  .card h3 { margin:0 0 4px; font-size:1.02rem; }
+  .meta { color:var(--muted); font-size:.85rem; margin:2px 0 8px; }
+  .price { font-size:.9rem; margin:6px 0; }
+  .price b { color:var(--gold); }
+  .badge { display:inline-block; font-size:.72rem; padding:3px 9px; border-radius:999px; background:#eef5f2; color:var(--accent); margin:2px 4px 2px 0; font-weight:600; }
+  .badge.hotel { background:#fdf3e1; color:var(--gold); }
+  .badge.est { background:#f1f1f4; color:var(--muted); }
+  .row { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
+  .btn { display:inline-block; padding:8px 12px; border-radius:10px; background:var(--accent); color:#fff; text-decoration:none; font-size:.85rem; font-weight:600; border:0; cursor:pointer; }
+  .btn.alt { background:#fff; color:var(--accent); border:1px solid var(--accent); }
+  .btn[disabled] { opacity:.6; cursor:default; }
+  .btn.on { background:var(--accent); color:#fff; }
+  .likebtn { border:1px solid var(--accent); background:#fff; color:var(--accent); border-radius:999px; padding:7px 14px; font-weight:600; font-size:.85rem; cursor:pointer; }
+  .likebtn.on { background:var(--accent); color:#fff; }
+  .likebtn[disabled] { opacity:.7; cursor:default; }
+  .note { font-size:.8rem; color:var(--muted); margin-top:6px; }
+  details.map { margin-top:10px; }
+  details.map summary { cursor:pointer; color:var(--accent); font-weight:600; font-size:.86rem; }
+  details.map iframe { width:100%; height:230px; border:0; border-radius:10px; margin-top:8px; }
+  /* resumen */
+  .winners { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; }
+  .win { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .win small { color:var(--muted); font-size:.74rem; text-transform:uppercase; letter-spacing:.03em; font-weight:700; }
+  .win b { display:block; font-size:.98rem; margin-top:4px; }
+  .win span { font-size:.8rem; color:var(--muted); }
+  .win.best { border-color:var(--accent); box-shadow:0 0 0 2px #dff0ea inset; }
+  /* tabla */
+  .tablewrap { overflow-x:auto; background:#fff; border:1px solid var(--line); border-radius:12px; }
+  table { border-collapse:collapse; width:100%; min-width:780px; font-size:.86rem; }
+  th, td { padding:9px 8px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
+  th { background:#f0f3f7; font-size:.74rem; text-transform:uppercase; color:var(--muted); cursor:pointer; user-select:none; }
+  th.sorted::after { content:" ▼"; }
+  th.sorted.asc::after { content:" ▲"; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  tr.top td { background:#f4faf7; }
+  .score { font-weight:700; color:var(--accent); }
+  /* controles */
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .controls label { font-size:.8rem; color:var(--muted); display:block; }
+  .controls input[type=range] { width:100%; }
+  .controls select { width:100%; padding:8px; border-radius:8px; border:1px solid var(--line); font:inherit; }
+  .addbox { background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; margin:14px 0; }
+  .addbox input, .addbox textarea { width:100%; padding:10px; border:1px solid var(--line); border-radius:10px; font:inherit; margin-top:6px; }
+  .addbox button { margin-top:10px; background:var(--accent); color:#fff; border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; }
+  .custom-tag { font-size:.75rem; color:var(--gold); font-weight:600; }
+  #status { font-size:.85rem; color:var(--muted); margin-top:6px; }
+  footer { text-align:center; color:var(--muted); font-size:.78rem; padding:20px 14px 36px; }
+  .act-day { margin:18px 0 6px; font-size:1.1rem; }
+  .act-grid { display:grid; gap:12px; grid-template-columns:1fr; }
+  @media (min-width:700px){ .act-grid { grid-template-columns:1fr 1fr; } }
+  .hl { outline:3px solid var(--accent); outline-offset:2px; }
+  .sharebtn { border:1px solid var(--accent); background:#fff; color:var(--accent); border-radius:10px; padding:7px 12px; font-weight:600; font-size:.85rem; cursor:pointer; }
+  #modal { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:flex-start; justify-content:center; padding:20px 12px; overflow:auto; z-index:50; }
+  #modal.open { display:flex; }
+  #modal .box { background:#fff; border-radius:16px; max-width:680px; width:100%; position:relative; }
+  #modal .close { position:absolute; top:8px; right:10px; border:0; background:#fff; border-radius:999px; width:34px; height:34px; font-size:18px; cursor:pointer; z-index:2; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+  #toast { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:#222; color:#fff; padding:10px 16px; border-radius:10px; font-size:.9rem; display:none; z-index:60; }
+  @media (max-width:520px){ .card .photo { height:150px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cena de Nochebuena · Barra da Tijuca</h1>
+  <p>24 de diciembre de 2026 · 8 adultos y 7 niños · precios y datos al 16/11/2026</p>
+</header>
+
+<div style="text-align:center;margin:10px 0 0"><button id="share-btn" style="background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer">Compartir esta página</button> <span id="share-msg" style="font-size:.85rem;color:var(--muted)"></span></div>
+<nav>
+  <a href="/">Inicio</a>
+  <a href="#resumen">Resumen</a>
+  <a href="#tabla">Tabla</a>
+  <a href="#opciones">Opciones</a>
+  <a href="/actividades">Actividades</a>
+  <a href="/dias">Días y votos</a>
+  <a href="#agregar">Agregar</a>
+  <a href="#notas">Notas</a>
+</nav>
+
+<main>
+
+<section id="resumen">
+  <h2>Resumen</h2>
+  <div class="winners" id="winners"></div>
+  <p class="note">Puntaje = mezcla de precio (35 %), distancia (25 %), calificación Google (25 %) y votos (15 %). Puedes cambiar los pesos abajo.</p>
+  <div class="controls" style="margin-top:10px">
+    <div><label>Peso precio: <span id="w-price-v">35</span></label><input type="range" id="w-price" min="0" max="100" value="35"></div>
+    <div><label>Peso distancia: <span id="w-dist-v">25</span></label><input type="range" id="w-dist" min="0" max="100" value="25"></div>
+    <div><label>Peso calidad (Google): <span id="w-q-v">25</span></label><input type="range" id="w-q" min="0" max="100" value="25"></div>
+    <div><label>Peso votos: <span id="w-v-v">15</span></label><input type="range" id="w-v" min="0" max="100" value="15"></div>
+  </div>
+</section>
+
+<section id="tabla">
+  <h2>Comparativo</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr>
+        <th data-k="rank">#</th>
+        <th data-k="name">Lugar</th>
+        <th data-k="precio">Precio pp (R$)</th>
+        <th data-k="km">Distancia</th>
+        <th data-k="g">Google ★</th>
+        <th data-k="votes">Votos</th>
+        <th data-k="cena">Cena 24</th>
+        <th data-k="total">Total 15 pers.</th>
+        <th data-k="score">Puntaje</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <p class="note">Total grupo = 8 adultos, 1 de 15 años (precio de adulto donde aplica) y 6 niños (6, 7, 8, 9, 9 y 10 años); el de 4 años es cortesía en la mayoría. Precios marcados como "est." son estimaciones por nivel de precio (no tienen cifra publicada). Distancia en auto desde el Laghetto Stilo Barra.</p>
+</section>
+
+<section id="opciones">
+  <h2>Opciones</h2>
+  <div class="controls" style="margin-bottom:10px">
+    <div><label>Filtrar por cena 24</label>
+      <select id="f-cena">
+        <option value="all">Todas</option>
+        <option value="ok">Cena confirmada</option>
+        <option value="no">Sin confirmar</option>
+      </select>
+    </div>
+    <div><label>Filtrar por tipo</label><select id="f-tipo"></select></div>
+    <div><label>Ordenar tarjetas por</label>
+      <select id="sort">
+        <option value="score">Puntaje (mejor primero)</option>
+        <option value="precio">Precio pp (más barato)</option>
+        <option value="total">Total grupo (más barato)</option>
+        <option value="cena">Primero con cena confirmada</option>
+        <option value="km">Distancia (más cerca)</option>
+        <option value="g">Calificación Google</option>
+        <option value="votes">Votos</option>
+      </select>
+    </div>
+  </div>
+  <div id="cards"></div>
+</section>
+
+<section id="agregar">
+  <h2>Agregar una opción</h2>
+  <div class="addbox">
+    <label>Nombre del lugar<input id="add-name" maxlength="60" placeholder="Ej: Restaurante X"></label>
+    <label>Nota o precio aprox.<textarea id="add-note" rows="2" maxlength="200" placeholder="Ej: buffet, R$300 pp, tiene espacio kids"></textarea></label>
+    <label>Link (Instagram, Maps o web)<input id="add-link" maxlength="300" placeholder="https://..."></label>
+    <button id="add-btn">Agregar</button>
+    <div id="status"></div>
+  </div>
+  <h2>Sugerencias del grupo</h2>
+  <div id="custom-list"></div>
+</section>
+
+<section id="notas">
+  <div id="general-notes"></div>
+  <div class="card"><div class="body">
+    <p class="note" style="margin:0">Las fotos son de Google Maps y pueden cambiar. Los precios marcados "est." son aproximados. Confirma antes de comprar.</p>
+  </div></div>
+</section>
+
+</main>
+
+<div id="modal"><div class="box"><button class="close" id="modal-close" aria-label="Cerrar">×</button><div id="modal-body"></div></div></div>
+<div id="toast"></div>
+
+<footer>Datos recopilados el 16/11/2026 desde Google, webs oficiales, Sympla, Instagram y WhatsApp.</footer>
+
+<script src="/js/data.js"></script>
+<script>
+var API = "/api/votes";
+var ACT_LIKED_KEY = "actliked-v1";
+var actVotes = {};
+function actLiked(){ try { return JSON.parse(localStorage.getItem(ACT_LIKED_KEY)||"[]"); } catch(e){ return []; } }
+function actSaveLiked(l){ try { localStorage.setItem(ACT_LIKED_KEY, JSON.stringify(l)); } catch(e){} }
+function renderActivities(){
+  var box = document.getElementById("act-days");
+  if (!box) return;
+  var mine = actLiked();
+  var days = [25,26,27,28,29];
+  var fd = document.getElementById("af-day").value, fc = document.getElementById("af-cat").value;
+  box.innerHTML = days.filter(function(d){ return fd==="all" || Number(fd)===d; }).map(function(d){
+    var list = ACTIVITIES.filter(function(a){return a.day===d && (fc==="all" || a.cat===fc);}).sort(function(x,y){ return (actVotes[y.id]||0)-(actVotes[x.id]||0); });
+    return '<h3 class="act-day">Día '+d+' de diciembre</h3><div class="act-grid">' + list.map(function(a){
+      var voted = mine.indexOf(a.id)!==-1;
+      return '<div class="card" data-act="'+a.id+'"><div class="body">'
+        + '<h3>'+esc(a.name)+'</h3>'
+        + '<p class="note" style="margin:4px 0">'+esc(a.tipo)+' · '+esc(a.precio)+'</p>'
+        + '<p style="margin:6px 0">'+esc(a.que)+'</p>'
+        + '<div class="row">'
+        + '<a class="btn alt" href="'+esc(a.foto)+'" target="_blank" rel="noopener">Fotos</a>'
+        + '<a class="btn alt" href="'+esc(a.igq)+'" target="_blank" rel="noopener">Instagram</a>'
+        + '<a class="btn alt" href="'+esc(a.web||a.webq)+'" target="_blank" rel="noopener">'+(a.web?'Web':'Buscar web')+'</a>'
+        + '<button class="sharebtn" data-share="'+a.id+'">Compartir</button>'
+        + '<button class="btn" '+(voted?'disabled':'')+' onclick="actLike(\''+a.id+'\', this)">'+(voted?'Votado':'Votar')+' ('+(actVotes[a.id]||0)+')</button>'
+        + '</div></div></div>';
+    }).join('') + '</div>';
+  }).join('');
+}
+function actLike(id, btn){
+  btn.disabled = true;
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"actlike",id:id})})
+    .then(function(r){return r.json();}).then(function(d){
+      var l = actLiked(); if (l.indexOf(id)===-1){ l.push(id); actSaveLiked(l); }
+      actVotes = d.actlikes || actVotes; renderActivities();
+    }).catch(function(){ btn.disabled=false; document.getElementById("status").textContent="No se pudo registrar el voto."; });
+}
+
+var LIKED_KEY = "liked-v2";
+var votes = {};
+var overrides = {};
+var sortKey = "score";
+var sortAsc = false;
+
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function liked(){ try { return JSON.parse(localStorage.getItem(LIKED_KEY)||"[]"); } catch(e){ return []; } }
+function saveLiked(l){ try { localStorage.setItem(LIKED_KEY, JSON.stringify(l)); } catch(e){} }
+function weights(){
+  return { p:+document.getElementById("w-price").value, d:+document.getElementById("w-dist").value,
+           q:+document.getElementById("w-q").value, v:+document.getElementById("w-v").value };
+}
+function norm(val, min, max, invert){
+  if (val==null || isNaN(val)) return 0.5;
+  if (max===min) return 1;
+  var x = (val-min)/(max-min);
+  return invert ? 1-x : x;
+}
+function computeRows(){
+  var w = weights(); var tw = (w.p+w.d+w.q+w.v) || 1;
+  var prices = DATA.filter(function(d){return d.precio!=null;}).map(function(d){return d.precio;});
+  var kms = DATA.map(function(d){return d.km;});
+  var gs = DATA.filter(function(d){return d.g!=null;}).map(function(d){return d.g;});
+  var vs = DATA.map(function(d){return votes[d.id]||0;});
+  var pmin=Math.min.apply(null,prices), pmax=Math.max.apply(null,prices);
+  var kmin=Math.min.apply(null,kms), kmax=Math.max.apply(null,kms);
+  var gmin=Math.min.apply(null,gs), gmax=Math.max.apply(null,gs);
+  var vmax=Math.max.apply(null,vs.concat([0]));
+  var rows = DATA.map(function(d){
+    var sp = d.precio==null ? 0.5 : norm(d.precio, pmin, pmax, true);
+    var sd = norm(d.km, kmin, kmax, true);
+    var sq = d.g==null ? 0.5 : norm(d.g, gmin, gmax, false);
+    var sv = vmax ? (votes[d.id]||0)/vmax : 0;
+    var score = (w.p*sp + w.d*sd + w.q*sq + w.v*sv) / tw * 100;
+    return { id:d.id, name:d.name, precio:d.precio, est:d.est, km:d.km, g:d.g, votes:votes[d.id]||0, score:score, d:d };
+  });
+  return rows;
+}
+function fmtPrecio(r){ if (r.precio==null) return "—"; return "R$ " + r.precio.toLocaleString("es-AR") + (r.est?" (est.)":""); }
+function fmtKm(r){ return r.km===0 ? "En el hotel" : r.km.toFixed(1)+" km"; }
+
+function renderWinners(rows){
+  var by = function(k, dir){ var best=null; rows.forEach(function(r){ var v = k==="precio"?r.precio:(k==="km"?r.km:(k==="g"?r.g:(k==="votes"?r.votes:r.score))); if(v==null) return; if(best==null || (dir==="min"? v<best.v : v>best.v)) best={r:r,v:v}; }); return best; };
+  var cards = [
+    {t:"Mejor en general", b:by("score","max"), sub:function(b){return "Puntaje "+b.v.toFixed(0)+" / 100";}, best:true},
+    {t:"Más barato", b:by("precio","min"), sub:function(b){return fmtPrecio(b.r);}},
+    {t:"Más cerca", b:by("km","min"), sub:function(b){return fmtKm(b.r);}},
+    {t:"Mejor calificado", b:by("g","max"), sub:function(b){return "Google "+b.v.toFixed(1)+" ★";}},
+    {t:"Más votado", b:by("votes","max"), sub:function(b){return b.v+" votos";}}
+  ];
+  document.getElementById("winners").innerHTML = cards.map(function(c){
+    if(!c.b) return '<div class="win"><small>'+c.t+'</small><b>—</b><span>Sin datos aún</span></div>';
+    return '<div class="win'+(c.best?' best':'')+'"><small>'+c.t+'</small><b>'+esc(c.b.r.name)+'</b><span>'+esc(c.sub(c.b))+'</span></div>';
+  }).join("");
+}
+
+function renderTable(rows){
+  var list = rows.slice();
+  list.sort(function(a,b){
+    var va = sortKey==="precio"?(a.precio==null?1e9:a.precio):(sortKey==="km"?a.km:(sortKey==="g"?(a.g==null?-1:a.g):(sortKey==="votes"?a.votes:(sortKey==="name"?a.name:a.score))));
+    var vb = sortKey==="precio"?(b.precio==null?1e9:b.precio):(sortKey==="km"?b.km:(sortKey==="g"?(b.g==null?-1:b.g):(sortKey==="votes"?b.votes:(sortKey==="name"?b.name:b.score))));
+    if (va<vb) return sortAsc?-1:1; if (va>vb) return sortAsc?1:-1; return 0;
+  });
+  document.querySelectorAll("th[data-k]").forEach(function(th){
+    th.classList.toggle("sorted", th.getAttribute("data-k")===sortKey);
+    th.classList.toggle("asc", th.getAttribute("data-k")===sortKey && sortAsc);
+  });
+  var byScore = rows.slice().sort(function(a,b){return b.score-a.score;});
+  document.getElementById("tbody").innerHTML = list.map(function(r){
+    var rank = byScore.findIndex(function(x){return x.id===r.id;})+1;
+    return '<tr class="'+(rank===1?'top':'')+'"><td>'+rank+'</td><td><b>'+esc(r.name)+'</b><br><span class="note">'+esc(r.d.tipo)+'</span></td>'
+      + '<td class="num">'+fmtPrecio(r)+'</td><td class="num">'+fmtKm(r)+'</td><td class="num">'+(r.g==null?'—':r.g.toFixed(1)+' ★')+'</td>'
+      + '<td>'+(r.d.cena==="ok"?'<span class="badge">✓ Confirmada</span>':'<span class="badge est">Sin respuesta aún</span>')+'</td><td class="num">'+(r.d.total==null?'—':'R$ '+r.d.total.toLocaleString("es-AR")+(r.d.totalest?' (est.)':''))+'</td><td class="num">'+r.votes+'</td><td class="num score">'+r.score.toFixed(0)+'</td></tr>';
+  }).join("");
+}
+
+function renderCards(rows){
+  var byScore = rows.slice().sort(function(a,b){return b.score-a.score;});
+  var rank = {}; byScore.forEach(function(r,i){ rank[r.id]=i+1; });
+  var sel = document.getElementById("sort").value;
+  var list = rows.slice().sort(function(a,b){
+    if (sel==="precio") return (a.precio==null?1e9:a.precio)-(b.precio==null?1e9:b.precio);
+    if (sel==="cena") return (a.d.cena==="ok"?0:1)-(b.d.cena==="ok"?0:1) || b.score-a.score;
+    if (sel==="total") return (a.d.total==null?1e9:a.d.total)-(b.d.total==null?1e9:b.d.total);
+    if (sel==="km") return a.km-b.km;
+    if (sel==="g") return (b.g||0)-(a.g||0);
+    if (sel==="votes") return b.votes-a.votes;
+    return b.score-a.score;
+  });
+  document.getElementById("cards").innerHTML = list.map(function(r){
+    var d = r.d; var ov = overrides[d.id]||{};
+    var priceLine = ov.price ? ov.price : (d.precio==null?"Precio no verificado":"Precio aprox.: <b>"+fmtPrecio(r)+"</b>");
+    var noteText = ov.note || d.note;
+    var img = d.foto ? '<img class="photo" src="'+esc(d.foto)+'" alt="'+esc(d.name)+'">' : '<div class="photo" style="height:180px;background:#eef5f2"></div>';
+    var mapq = encodeURIComponent(d.q);
+    return '<div class="card" data-id="'+d.id+'">'+img+'<div class="body">'
+      + '<h3>'+esc(d.name)+' <span class="badge">#'+rank[d.id]+'</span>'+(d.hotel?' <span class="badge hotel">Hotel</span>':'')+'</h3>'
+      + '<p class="meta">'+esc(d.tipo)+' · '+fmtKm(r)+(d.min?' · '+d.min+' min':'')+(d.g!=null?' · Google '+d.g.toFixed(1)+' ★':'')+'</p>'
+      + '<p class="price">'+priceLine+(d.est?' <span class="badge est">est.</span>':'')+'</p>'
+      + '<p class="price"><b>Total grupo (15):</b> '+(d.total==null?'no verificado':'R$ '+d.total.toLocaleString("es-AR")+(d.totalest?' (est.)':''))+' <span class="note">'+esc(d.totaltxt)+'</span></p>'
+      + '<p class="meta"><b>Cena 24:</b> '+(d.cena==="ok"?'<span class="badge">✓ Confirmada</span>':'<span class="badge est">Sin confirmar</span>')+' '+esc(d.ceia)+'</p>'
+      + '<p class="meta"><b>Niños:</b> '+esc(d.kids)+' · <b>Vista al mar:</b> '+esc(d.mar)+'</p>'
+      + '<p class="note">'+esc(noteText||'')+'</p>'
+      + '<div class="row">'
+      + '<button class="likebtn'+(liked().indexOf(d.id)>-1?' on':'')+'" data-like="'+d.id+'" '+(liked().indexOf(d.id)>-1?'disabled':'')+'>♥ '+(liked().indexOf(d.id)>-1?'Te gusta':'Me gusta')+'</button>'
+      + '<span class="note">'+(votes[d.id]||0)+' votos</span></div>'
+      + '<div class="row">'
+      + (d.src? '<a class="btn" href="'+esc(d.src)+'" target="_blank" rel="noopener">Fuente</a>':'')
+      + (d.ig? '<a class="btn alt" href="'+esc(d.ig)+'" target="_blank" rel="noopener">Instagram</a>':'')
+      + '<button class="sharebtn" data-share="'+d.id+'">Compartir</button>'
+      + '<span class="note">Reserva: '+esc(d.res)+'</span></div>'
+      + '<details class="map"><summary>Ver mapa</summary><iframe loading="lazy" src="https://www.google.com/maps?q='+mapq+'&amp;output=embed"></iframe></details>'
+      + '</div></div>';
+  }).join("");
+  document.querySelectorAll("[data-like]").forEach(function(b){
+    b.addEventListener("click", function(){ like(b.getAttribute("data-like"), b); });
+  });
+}
+
+function visibleRows(rows){
+  var fc = document.getElementById("f-cena").value, ft = document.getElementById("f-tipo").value;
+  return rows.filter(function(r){
+    if (fc!=="all" && r.d.cena!==fc) return false;
+    if (ft!=="all" && r.d.tipo!==ft) return false;
+    return true;
+  });
+}
+function initTipoFilter(){
+  var sel = document.getElementById("f-tipo");
+  var tipos = [];
+  DATA.forEach(function(d){ if (tipos.indexOf(d.tipo)===-1) tipos.push(d.tipo); });
+  sel.innerHTML = '<option value="all">Todos</option>' + tipos.map(function(t){ return '<option value="'+esc(t)+'">'+esc(t)+'</option>'; }).join("");
+}
+function renderAll(){
+  var rows = computeRows();
+  renderWinners(rows);
+  renderTable(visibleRows(rows));
+  renderCards(visibleRows(rows));
+}
+
+function like(id, btn){
+  btn.disabled = true;
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"like",id:id})})
+    .then(function(r){return r.json();}).then(function(d){
+      var l = liked(); if (l.indexOf(id)===-1){ l.push(id); saveLiked(l); }
+      votes = d.likes || votes; renderAll(); renderCustom(d.custom||[]);
+    }).catch(function(){ btn.disabled=false; document.getElementById("status").textContent="No se pudo registrar el like."; });
+}
+
+function renderCustom(list){
+  var box = document.getElementById("custom-list");
+  box.innerHTML = list.map(function(o){
+    return '<div class="card"><div class="body"><h3>'+esc(o.name)+' <span class="custom-tag">Sugerido por el grupo</span></h3>'
+      + '<p class="note" style="margin:4px 0">'+esc(o.note||"")+'</p>'
+      + (o.link ? '<div class="row"><a class="btn alt" href="'+esc(o.link)+'" target="_blank" rel="noopener">Ver link</a></div>' : '') + '</div></div>';
+  }).join("");
+}
+
+function addOption(){
+  var name = document.getElementById("add-name").value.trim();
+  var note = document.getElementById("add-note").value.trim();
+  var link = document.getElementById("add-link").value.trim();
+  var st = document.getElementById("status");
+  if(!name){ st.textContent="Escribe un nombre."; return; }
+  if(link && !/^https?:\/\//.test(link)){ st.textContent="El link debe empezar con https://"; return; }
+  st.textContent="Guardando...";
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"add",name:name,note:note,link:link})})
+    .then(function(r){return r.json();}).then(function(d){
+      if(d.error){ st.textContent=d.error; return; }
+      ["add-name","add-note","add-link"].forEach(function(i){ document.getElementById(i).value=""; });
+      st.textContent="Listo, agregado."; renderCustom(d.custom||[]);
+    }).catch(function(){ st.textContent="No se pudo guardar."; });
+}
+
+function loadAll(){
+  fetch(API).then(function(r){return r.json();}).then(function(d){
+    votes = d.likes || {}; actVotes = d.actlikes || {}; overrides = d.content || {};
+    if (overrides.general) {
+      document.getElementById("general-notes").innerHTML = '<div class="card"><div class="body"><h3>Actualizaciones</h3><p class="note" style="white-space:pre-line;margin:0">'+esc(overrides.general)+'</p></div></div>';
+    }
+    renderAll(); renderCustom(d.custom||[]); renderActivities(); openFromHash();
+  }).catch(function(){ renderAll(); renderActivities(); document.getElementById("status").textContent="No se pudieron cargar los datos del grupo."; });
+}
+
+["w-price","w-dist","w-q","w-v"].forEach(function(id){
+  document.getElementById(id).addEventListener("input", function(){
+    document.getElementById(id+"-v").textContent = this.value; renderAll();
+  });
+});
+document.getElementById("sort").addEventListener("change", renderAll);
+document.getElementById("share-btn").addEventListener("click", function(){
+  var url = location.href.split("#")[0];
+  var msg = document.getElementById("share-msg");
+  if (navigator.share) { navigator.share({ title: "Nochebuena en Barra da Tijuca", text: "Votemos restaurantes y actividades", url: url }).catch(function(){}); return; }
+  if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function(){ msg.textContent = "Link copiado"; }, function(){ msg.textContent = url; }); }
+  else { msg.textContent = url; }
+});
+["f-cena","f-tipo"].forEach(function(id){ document.getElementById(id).addEventListener("change", renderAll); });
+initTipoFilter();
+
+function toast(t){ var el=document.getElementById("toast"); el.textContent=t; el.style.display="block"; clearTimeout(toast._t); toast._t=setTimeout(function(){ el.style.display="none"; },2200); }
+function itemUrl(id){ return location.origin + "/item/" + encodeURIComponent(id); }
+function shareItem(id){
+  var url = itemUrl(id);
+  var title = (ACTIVITIES.filter(function(a){return a.id===id;})[0] || DATA.filter(function(d){return d.id===id;})[0] || {}).name || "Nochebuena";
+  if (navigator.share) { navigator.share({ title: title, text: "Mira esta opción para Nochebuena / Navidad en Río", url: url }).catch(function(){}); return; }
+  if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function(){ toast("Link copiado"); }, function(){ toast(url); }); }
+  else { toast(url); }
+}
+function closeModal(){ document.getElementById("modal").classList.remove("open"); history.replaceState(null,"",location.pathname+location.search); }
+function openItem(id){
+  var el = document.querySelector('[data-id="'+id+'"]') || document.querySelector('[data-act="'+id+'"]');
+  if (!el) return false;
+  document.querySelectorAll(".hl").forEach(function(x){ x.classList.remove("hl"); });
+  el.classList.add("hl");
+  var body = document.getElementById("modal-body");
+  body.innerHTML = el.outerHTML;
+  body.querySelectorAll("[data-share]").forEach(function(b){ b.addEventListener("click", function(){ shareItem(b.getAttribute("data-share")); }); });
+  body.querySelectorAll("[data-like]").forEach(function(b){ b.addEventListener("click", function(){ like(b.getAttribute("data-like"), b); }); });
+  document.getElementById("modal").classList.add("open");
+  return true;
+}
+function openFromHash(){
+  var id = decodeURIComponent((location.hash||"").replace(/^#/,""));
+  if (!id) return;
+  var known = ACTIVITIES.some(function(a){return a.id===id;}) || DATA.some(function(d){return d.id===id;});
+  if (!known) return;
+  setTimeout(function(){
+    var el = document.querySelector('[data-id="'+id+'"]') || document.querySelector('[data-act="'+id+'"]');
+    if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    openItem(id);
+  }, 150);
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest && e.target.closest("[data-share]");
+  if (b) { shareItem(b.getAttribute("data-share")); }
+});
+document.getElementById("modal-close").addEventListener("click", closeModal);
+document.getElementById("modal").addEventListener("click", function(e){ if (e.target.id==="modal") closeModal(); });
+document.addEventListener("keydown", function(e){ if (e.key==="Escape") closeModal(); });
+window.addEventListener("hashchange", openFromHash);
+document.querySelectorAll("th[data-k]").forEach(function(th){
+  th.addEventListener("click", function(){
+    var k = th.getAttribute("data-k"); if(k==="rank") k="score";
+    if (sortKey===k) sortAsc=!sortAsc; else { sortKey=k; sortAsc = (k==="precio"||k==="km"); }
+    renderAll();
+  });
+});
+document.getElementById("add-btn").addEventListener("click", addOption);
+renderAll();
+loadAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Actividades 25 al 29 de diciembre · Río de Janeiro</title>
+<link rel="stylesheet" href="/css/site.css">
+<style>
+.photo{height:150px;border-radius:12px;background:linear-gradient(135deg,#cfe7df,#f1e6cf);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--brand);font-weight:600;font-size:.9rem;border:1px dashed #9fc7bb}
+.photo:hover{border-style:solid}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.84rem}
+.facts div{background:var(--bg);border-radius:10px;padding:8px 10px}
+.facts b{display:block;color:var(--muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px}
+.rec{font-size:.88rem;margin:0}
+.badge-u{font-size:.7rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.4px}
+.form{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-top:34px}
+.form h2{margin:0 0 4px;font-size:1.15rem}
+.fgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:14px}
+.fgrid label{display:flex;flex-direction:column;gap:5px;font-size:.84rem;color:var(--muted);font-weight:600}
+.fgrid input,.fgrid select,.fgrid textarea{font:inherit;font-size:.92rem;color:var(--ink);padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.fgrid textarea{min-height:70px;resize:vertical}
+.fgrid .full{grid-column:1/-1}
+.msg{font-size:.88rem;color:var(--muted);margin-top:10px;min-height:1.2em}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="/">Navidad en Río<small>Barra da Tijuca · 2026</small></a>
+  <nav class="menu">
+    <a href="/">Inicio</a><a href="/cena">Cena</a><a class="on" href="/actividades">Actividades</a><a href="/dias">Días y votos</a>
+  </nav>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <h1>Actividades del 25 al 29 de diciembre</h1>
+  <p>Playas, atracciones y excursiones desde Barra da Tijuca. Votá las que más te gusten, sugerí otras y mirá en la página de días en qué fecha conviene hacer cada una.</p>
+  <div class="stats">
+    <div class="stat"><b id="st-total">0</b>actividades</div>
+    <div class="stat"><b id="st-sug">0</b>sugeridas por el grupo</div>
+    <div class="stat"><b id="st-votes">0</b>votos</div>
+  </div>
+</div></section>
+
+<main class="wrap">
+  <div class="toolbar">
+    <div class="seg" id="cat-seg" role="tablist">
+      <button class="on" data-cat="all">Todas</button>
+      <button data-cat="playa">Playas y naturaleza</button>
+      <button data-cat="atraccion">Atracciones</button>
+      <button data-cat="excursion">Excursiones</button>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <select class="sel" id="day-sel" aria-label="Día">
+        <option value="all">Todos los días</option>
+        <option value="25">25 de diciembre</option><option value="26">26 de diciembre</option>
+        <option value="27">27 de diciembre</option><option value="28">28 de diciembre</option>
+        <option value="29">29 de diciembre</option>
+      </select>
+      <select class="sel" id="sort-sel" aria-label="Orden">
+        <option value="votes">Más votadas</option>
+        <option value="dist">Más cerca</option>
+        <option value="day">Por día</option>
+        <option value="name">Nombre (A–Z)</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <section class="form" id="sugerir">
+    <h2>Sugerir una actividad</h2>
+    <p class="note" style="margin:0">Agregá una opción para que el grupo la vote. Quedará visible para todos.</p>
+    <div class="fgrid">
+      <label>Nombre<input id="s-name" maxlength="80" placeholder="Ej: Jardim Botânico"></label>
+      <label>Tipo
+        <select id="s-cat"><option value="playa">Playa y naturaleza</option><option value="atraccion" selected>Atracción</option><option value="excursion">Excursión</option></select></label>
+      <label>Día sugerido
+        <select id="s-day"><option value="0">Sin definir</option><option value="25">25 dic</option><option value="26">26 dic</option><option value="27">27 dic</option><option value="28">28 dic</option><option value="29">29 dic</option></select></label>
+      <label>Precio aprox.<input id="s-precio" maxlength="120" placeholder="Ej: R$ 60 pp"></label>
+      <label>Recomendado para<input id="s-rec" maxlength="120" placeholder="Ej: familias con niños"></label>
+      <label class="full">Descripción<textarea id="s-que" maxlength="300" placeholder="Qué tiene, cómo llegar, distancia..."></textarea></label>
+      <label class="full">Link (web o Instagram)<input id="s-link" maxlength="300" placeholder="https://..."></label>
+    </div>
+    <div style="margin-top:14px"><button class="btn primary" id="s-btn">Enviar sugerencia</button></div>
+    <div class="msg" id="s-msg"></div>
+  </section>
+
+  <p class="note" style="margin-top:22px">Distancias aproximadas en auto desde el hotel. Precios orientativos de webs de viaje y operadores: confirmá antes de reservar. Las fotos abren una búsqueda de imágenes.</p>
+</main>
+
+<div class="toast" id="toast"></div>
+<footer class="footer">Datos del grupo · actualizado el 16/11/2026</footer>
+
+<script src="/js/data.js"></script>
+<script src="/js/common.js"></script>
+<script>
+var state = { cat: "all", day: "all", sort: "votes", votes: {}, liked: getJSON("actliked-v1", []), custom: [] };
+function all(){ return ACTIVITIES.concat(state.custom.map(function(c){ return {id:c.id,name:c.name,cat:c.cat,day:c.day,precio:c.precio||"Consultar",rec:c.rec||"Todos",que:c.que||"",km:null,dist:"Distancia por confirmar",web:c.link||"",foto:"https://www.google.com/search?tbm=isch&q="+encodeURIComponent(c.name),webq:"https://www.google.com/search?q="+encodeURIComponent(c.name),custom:true}; })); }
+function visible(){
+  return all().filter(function(a){
+    return (state.cat==="all" || a.cat===state.cat) && (state.day==="all" || String(a.day)===state.day);
+  }).sort(function(x,y){
+    if (state.sort==="votes") return (state.votes[y.id]||0)-(state.votes[x.id]||0) || (x.day||99)-(y.day||99);
+    if (state.sort==="dist") return (x.km==null?999:x.km)-(y.km==null?999:y.km);
+    if (state.sort==="day") return (x.day||99)-(y.day||99) || (state.votes[y.id]||0)-(state.votes[x.id]||0);
+    return x.name.localeCompare(y.name);
+  });
+}
+function card(a){
+  var voted = state.liked.indexOf(a.id) !== -1;
+  var n = state.votes[a.id] || 0;
+  var dayChip = a.day ? '<span class="chip day">'+a.day+' dic</span>' : '<span class="chip day">Día por definir</span>';
+  return '<article class="card" id="'+esc(a.id)+'">'
+    + '<div class="chips">'+dayChip+'<span class="chip cat-'+esc(a.cat)+'">'+esc(catLabel(a.cat))+'</span>'+(a.custom?'<span class="badge-u">Sugerida por el grupo</span>':'')+'</div>'
+    + '<a class="photo" href="'+esc(a.foto)+'" target="_blank" rel="noopener">Ver fotos de '+esc(a.name)+'</a>'
+    + '<h3>'+esc(a.name)+'</h3>'
+    + '<div class="facts">'
+    +   '<div><b>Distancia</b>'+esc(a.dist||(a.km!=null?'~'+a.km+' km':'Por confirmar'))+'</div>'
+    +   '<div><b>Precio</b>'+esc(a.precio)+'</div>'
+    + '</div>'
+    + '<p class="rec"><b>Recomendado para:</b> '+esc(a.rec||'Todos')+'</p>'
+    + '<p class="desc">'+esc(a.que)+'</p>'
+    + '<div class="actions">'
+    +   '<button class="btn primary" data-vote="'+esc(a.id)+'" '+(voted?'disabled':'')+'>'+(voted?'✓ Votado':'Votar')+' <span class="count">· '+n+'</span></button>'
+    +   '<button class="btn" data-share="'+esc(a.id)+'">Compartir</button>'
+    +   (a.web?'<a class="btn ghost" href="'+esc(a.web)+'" target="_blank" rel="noopener">Sitio web</a>':'')
+    + '</div></article>';
+}
+function render(){
+  var list = visible();
+  document.getElementById("grid").innerHTML = list.length ? list.map(card).join("") : '<p class="note">No hay actividades con esos filtros. Podés sugerir una abajo.</p>';
+  document.getElementById("st-total").textContent = all().length;
+  document.getElementById("st-sug").textContent = state.custom.length;
+  var total = 0; for (var k in state.votes) total += state.votes[k];
+  document.getElementById("st-votes").textContent = total;
+}
+function vote(id, btn){
+  btn.disabled = true;
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"actlike",id:id})})
+    .then(function(r){return r.json();}).then(function(d){
+      state.liked.push(id); setJSON("actliked-v1", state.liked);
+      state.votes = d.actlikes || state.votes; render(); toast("Voto registrado");
+    }).catch(function(){ btn.disabled=false; toast("No se pudo registrar el voto"); });
+}
+function suggest(){
+  var msg = document.getElementById("s-msg");
+  var body = { action:"actadd", name:val("s-name"), cat:val("s-cat"), day:Number(val("s-day")), precio:val("s-precio"), rec:val("s-rec"), que:val("s-que"), link:val("s-link") };
+  if (!body.name) { msg.textContent = "Escribí un nombre."; return; }
+  if (body.link && !/^https?:\/\//.test(body.link)) { msg.textContent = "El link debe empezar con https://"; return; }
+  msg.textContent = "Enviando...";
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).then(function(d){
+      if (d.error) { msg.textContent = d.error; return; }
+      ["s-name","s-precio","s-rec","s-que","s-link"].forEach(function(i){ document.getElementById(i).value=""; });
+      state.custom = d.actcustom || state.custom; state.votes = d.actlikes || state.votes;
+      render(); msg.textContent = "¡Listo! Ya está para votar."; toast("Sugerencia agregada");
+    }).catch(function(){ msg.textContent = "No se pudo enviar."; });
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+
+document.getElementById("cat-seg").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-cat]"); if(!b) return;
+  state.cat = b.getAttribute("data-cat");
+  document.querySelectorAll("#cat-seg button").forEach(function(x){ x.classList.toggle("on", x===b); });
+  render();
+});
+document.getElementById("day-sel").addEventListener("change", function(e){ state.day = e.target.value; render(); });
+document.getElementById("sort-sel").addEventListener("change", function(e){ state.sort = e.target.value; render(); });
+document.getElementById("s-btn").addEventListener("click", suggest);
+document.getElementById("grid").addEventListener("click", function(e){
+  var v = e.target.closest("[data-vote]"); if (v) { vote(v.getAttribute("data-vote"), v); return; }
+  var s = e.target.closest("[data-share]"); if (s) {
+    var a = all().filter(function(x){return x.id===s.getAttribute("data-share");})[0];
+    if (a) shareLink(a.id, a.name);
+  }
+});
+function focusHash(){
+  var id = decodeURIComponent((location.hash||"").replace(/^#/,""));
+  var el = id && document.getElementById(id);
+  if (!el) return;
+  el.classList.add("hl");
+  setTimeout(function(){ el.scrollIntoView({behavior:"smooth", block:"center"}); }, 100);
+}
+render();
+fetch(API).then(function(r){return r.json();}).then(function(d){
+  state.votes = d.actlikes || {}; state.custom = d.actcustom || []; render(); focusHash();
+}).catch(function(){ toast("No se pudieron cargar los votos"); });
+window.addEventListener("hashchange", focusHash);
+</script>
+</body>
+</html>
