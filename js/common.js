@@ -7,6 +7,6 @@ function shareLink(id, title){
   if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function(){ toast("Link copiado"); }, function(){ toast(url); }); }
   else { toast(url); }
 }
-function catLabel(c){ return {playa:"Playa y naturaleza", atraccion:"Atracción", excursion:"Excursión", comida:"Comida"}[c] || c; }
+function catLabel(c){ return {playa:"Playa y naturaleza", atraccion:"Atracción", excursion:"Excursión", comida:"Comida",lluvia:"Si llueve"}[c] || c; }
 function getJSON(key, fallback){ try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); } catch(e){ return fallback; } }
 function setJSON(key, v){ try { localStorage.setItem(key, JSON.stringify(v)); } catch(e){} }

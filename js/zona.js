@@ -44,3 +44,16 @@
     if (d.hotel) f.rec = "Dentro del hotel Laghetto · " + (f.rec || "");
   });
 })();
+// Planes para días de lluvia: shoppings, acuario, zoológico.
+(function(){
+  var gi = function(q){ return "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(q + " Rio de Janeiro"); };
+  var L = [
+    {id:"a-barrashop", name:"Barra Shopping", precio:"Entrada gratis · cine y comidas aparte", dist:"Por confirmar (Barra)", rec:"Familia · niños · adultos", que:"Uno de los shoppings más grandes de Rio: cines, restaurantes, tiendas y juegos para chicos.", web:"https://www.barrashopping.com.br/"},
+    {id:"a-riodesign", name:"Rio Design Barra", precio:"Entrada gratis", dist:"Por confirmar (Barra)", rec:"Adultos · familia", que:"Shopping de diseño y gastronomía, con Irajá Redux y CT Boucherie.", web:"https://www.google.com/search?q=Rio+Design+Barra"},
+    {id:"a-villagemall", name:"VillageMall", precio:"Entrada gratis", dist:"Por confirmar (Barra)", rec:"Familia · adultos", que:"Shopping con cines, terraza gastronómica (Delírio Tropical) y tiendas.", web:"https://www.google.com/search?q=VillageMall+Barra"},
+    {id:"a-metropolitano", name:"Shopping Metropolitano", precio:"Entrada gratis", dist:"Por confirmar (Barra)", rec:"Familia · niños", que:"Shopping de la Barra con tiendas, cines y patio de comidas.", web:"https://www.google.com/search?q=Shopping+Metropolitano+Barra"},
+    {id:"a-aquariorio", name:"Aquário do Rio", precio:"Consultar", dist:"Por confirmar (Centro, Píer Mauá)", rec:"Familia · niños", que:"Acuario con especies marinas de la bahía y de otras regiones. Está junto al Museu do Amanhã.", web:"https://www.google.com/search?q=Aqu%C3%A1rio+do+Rio"},
+    {id:"a-zoo", name:"Zoológico do Rio", precio:"Consultar", dist:"Por confirmar (Guaratiba)", rec:"Familia · niños", que:"Zoológico con grandes áreas verdes y animales de distintas partes del mundo.", web:"https://www.google.com/search?q=Zool%C3%B3gico+do+Rio"}
+  ];
+  L.forEach(function(a){ ACTIVITIES.push({id:a.id, day:null, name:a.name, tipo:"lluvia", precio:a.precio, que:a.que, web:a.web, ig:"", src:"", q:a.name, foto:gi(a.name), igq:a.name, webq:a.name, cat:"lluvia", km:null, rec:a.rec, dist:a.dist}); });
+})();
