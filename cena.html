@@ -52,6 +52,7 @@
   #status{font-size:.85rem;color:var(--muted);margin-top:6px}
   @media (max-width:560px){.card .photo{height:150px}}
 .subnav{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.subnav a{font-size:.82rem;color:var(--brand);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff}.subnav a:hover{background:var(--brand-2)}
+.lnk{color:inherit;text-decoration:none;border-bottom:1px dashed var(--brand)}.lnk:hover{color:var(--brand)}
 </style>
 </head>
 <body>
@@ -258,7 +259,7 @@ function renderWinners(rows){
   ];
   document.getElementById("winners").innerHTML = cards.map(function(c){
     if(!c.b) return '<div class="win"><small>'+c.t+'</small><b>—</b><span>Sin datos aún</span></div>';
-    return '<div class="win'+(c.best?' best':'')+'"><small>'+c.t+'</small><b>'+esc(c.b.r.name)+'</b><span>'+esc(c.sub(c.b))+'</span></div>';
+    return '<div class="win'+(c.best?' best':'')+'"><small>'+c.t+'</small><b><a class="lnk" href="/item?id='+encodeURIComponent(c.b.r.id)+'">'+esc(c.b.r.name)+'</a></b><span>'+esc(c.sub(c.b))+'</span></div>';
   }).join("");
 }
 
@@ -276,7 +277,7 @@ function renderTable(rows){
   var byScore = rows.slice().sort(function(a,b){return b.score-a.score;});
   document.getElementById("tbody").innerHTML = list.map(function(r){
     var rank = byScore.findIndex(function(x){return x.id===r.id;})+1;
-    return '<tr class="'+(rank===1?'top':'')+'"><td>'+rank+'</td><td><b>'+esc(r.name)+'</b><br><span class="note">'+esc(r.d.tipo)+'</span></td>'
+    return '<tr class="'+(rank===1?'top':'')+'"><td>'+rank+'</td><td><b><a class="lnk" href="/item?id='+encodeURIComponent(r.id)+'">'+esc(r.name)+'</a></b><br><span class="note">'+esc(r.d.tipo)+'</span></td>'
       + '<td class="num">'+fmtPrecio(r)+'</td><td class="num">'+fmtKm(r)+'</td><td class="num">'+(r.g==null?'—':r.g.toFixed(1)+' ★')+'</td>'
       + '<td>'+(r.d.cena==="ok"?'<span class="badge">✓ Confirmada</span>':'<span class="badge est">Sin respuesta aún</span>')+'</td><td class="num">'+(r.d.total==null?'—':'R$ '+r.d.total.toLocaleString("es-AR")+(r.d.totalest?' (est.)':''))+'</td><td class="num">'+r.votes+'</td><td class="num score">'+r.score.toFixed(0)+'</td></tr>';
   }).join("");
