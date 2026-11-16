@@ -53,6 +53,12 @@ module.exports = async (req, res) => {
     if (req.method === "GET") return res.status(200).json(await state());
     if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido" });
     const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
+    if (body.action === "unlike") {
+      if (!ALLOWED.has(body.id)) return res.status(400).json({ error: "Opción inválida" });
+      const v = await cmd(["HINCRBY", "votes", body.id, -1]);
+      if (Number(v) < 0) await cmd(["HSET", "votes", body.id, 0]);
+      return res.status(200).json(await state());
+    }
     if (body.action === "like") {
       if (!ALLOWED.has(body.id)) return res.status(400).json({ error: "Opción inválida" });
       await cmd(["HINCRBY", "votes", body.id, 1]);
