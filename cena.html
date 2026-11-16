@@ -322,7 +322,7 @@ function renderCards(rows){
       + '<button class="ibtn" data-share="'+d.id+'" title="Compartir" aria-label="Compartir">'+ICON_SHARE+'</button>'
       + '</div>'
       + '<p class="reserva">Reserva: '+esc(d.res)+'</p>'
-      + '<details class="map"><summary>Ver mapa y distancia desde el hotel</summary><iframe loading="lazy" src="https://www.google.com/maps?saddr='+encodeURIComponent('Hotel Laghetto Stilo Barra, Rua Marcelo Roberto 65, Barra da Tijuca, Rio de Janeiro')+'&amp;daddr='+mapq+'&amp;output=embed"></iframe></details>'
+      + '<details class="map"><summary>Ver mapa</summary><iframe loading="lazy" src="https://www.google.com/maps?q='+mapq+'&amp;output=embed"></iframe></details>'
       + '</div></div>';
   }).join("");
   document.querySelectorAll("[data-like]").forEach(function(b){

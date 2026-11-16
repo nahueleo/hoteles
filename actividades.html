@@ -252,7 +252,7 @@ function renderGrid(){
       +   '<a class="ibtn" href="/item?id='+encodeURIComponent(x.id)+'" title="Ver detalle">'+ICON.link+'</a>'
       +   webBtn + igBtn
       + '</div>'
-      + '<div class="mapbox" id="map-'+esc(x.id)+'" hidden><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?saddr='+encodeURIComponent('Hotel Laghetto Stilo Barra, Rua Marcelo Roberto 65, Barra da Tijuca, Rio de Janeiro')+'&daddr='+encodeURIComponent((x.name||'')+' Rio de Janeiro')+'&output=embed"></iframe></div>'
+      + '<div class="mapbox" id="map-'+esc(x.id)+'" hidden><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q='+encodeURIComponent((x.name||'')+' Rio de Janeiro')+'&output=embed"></iframe><a class="btn ghost" style="margin-top:8px;display:inline-block" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent('Hotel Laghetto Stilo Barra, Rua Marcelo Roberto 65, Barra da Tijuca, Rio de Janeiro')+'&destination='+encodeURIComponent((x.name||'')+' Rio de Janeiro')+'&travelmode=driving">Cómo llegar desde el hotel</a></div>'
       + '</article>';
   }).join("");
 }

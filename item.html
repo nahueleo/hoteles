@@ -45,6 +45,7 @@ iframe{width:100%;height:280px;border:0;border-radius:12px;margin-top:8px}
 <script>
 var id = String(new URLSearchParams(location.search).get("id") || decodeURIComponent(location.pathname.replace(/^\/item\/?/,"").replace(/\/$/,""))).split(/\s/)[0];
 var votes = {}, actVotes = {}, custom = [], liked = getJSON("liked-v2", []), actLikedList = getJSON("actliked-v1", []);
+var dayvotes = {}, dayMine = getJSON("dayvoted-v1", []);
 
 function findItem(){
   var r = DATA.filter(function(d){ return d.id===id; })[0];
@@ -64,7 +65,7 @@ function renderRest(d){
   var price = d.precio==null ? "Precio no verificado" : "R$ "+d.precio.toLocaleString("es-AR")+(d.est?" (est.)":"");
   var total = d.total==null ? "—" : "R$ "+d.total.toLocaleString("es-AR")+(d.totalest?" (est.)":"");
   var dist = d.km===0 ? "En el hotel" : d.km.toFixed(1)+" km · "+d.min+" min en auto";
-  var map = 'https://www.google.com/maps?saddr='+encodeURIComponent('Hotel Laghetto Stilo Barra, Rua Marcelo Roberto 65, Barra da Tijuca, Rio de Janeiro')+'&daddr='+encodeURIComponent(d.q)+'&output=embed';
+  var map = 'https://www.google.com/maps?q='+encodeURIComponent(d.q)+'&output=embed';
   return '<article class="item"><div class="cover">'+(d.foto?'<img src="'+esc(d.foto)+'" alt="'+esc(d.name)+'">':'Sin foto cargada')+'</div>'
     + '<div class="body">'
     + '<div class="chips"><span class="chip">'+esc(d.tipo)+'</span>'+(d.hotel?'<span class="chip day">Hotel</span>':'')+'<span class="chip '+(d.cena==="ok"?'':'day')+'">Cena 24: '+(d.cena==="ok"?'confirmada':'sin respuesta aún')+'</span></div>'
@@ -103,7 +104,9 @@ function renderAct(a){
     + '<div class="row">'
     +   '<button class="btn primary" data-avote="'+esc(a.id)+'" '+(voted?'disabled':'')+'>'+(voted?'✓ Votado':'Votar')+' · '+n+'</button>'
     +   '<button class="btn" id="share">Compartir</button>'
-    +   '<a class="btn ghost" href="/actividades#'+esc(a.id)+'">Elegir día</a>'
+    +   '</div><div class="dayrow" style="margin-top:12px"><span class="note" style="align-self:center">Elegir día:</span>'
+    +   [26,27,28,29].map(function(d){ var done = dayMine.indexOf(a.id+"|"+d)!==-1; return '<button class="btn'+(done?' primary':'')+'" data-dvote="'+esc(a.id)+'" data-dday="'+d+'" '+(done?'disabled':'')+'>'+d+' dic · '+(dayvotes[a.id+"|"+d]||0)+'</button>'; }).join('')
+    +   '</div><div class="row">'
     +   ((a.web||a.webq)?'<a class="btn ghost" href="'+esc(a.web||a.webq)+'" target="_blank" rel="noopener">'+(a.web?'Sitio web':'Buscar web')+'</a>':'')
     +   '<a class="btn ghost" href="/actividades">← Volver a actividades</a>'
     + '</div></div></article>';
@@ -141,10 +144,26 @@ function render(){
       .then(function(r){return r.json();}).then(function(d){ actLikedList.push(id); setJSON("actliked-v1", actLikedList); actVotes = d.actlikes||actVotes; render(); toast("Voto registrado"); })
       .catch(function(){ av.disabled=false; toast("No se pudo registrar"); });
   });
+  bindDayVotes();
 }
 
+
+function bindDayVotes(){
+  document.querySelectorAll("[data-dvote]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var iid = b.getAttribute("data-dvote"), d = Number(b.getAttribute("data-dday"));
+      b.disabled = true;
+      fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"dayvote",id:iid,day:d})})
+        .then(function(r){return r.json();}).then(function(res){
+          dayMine.push(iid+"|"+d); setJSON("dayvoted-v1", dayMine);
+          dayvotes = res.dayvotes || dayvotes; render(); toast("Día "+d+" registrado");
+        }).catch(function(){ b.disabled=false; toast("No se pudo registrar el día"); });
+    });
+  });
+}
 if (!id) { location.replace("/actividades"); } else { render(); }
 fetch(API).then(function(r){return r.json();}).then(function(d){
+  dayvotes = d.dayvotes||{};
   votes = d.likes||{}; actVotes = d.actlikes||{}; custom = (d.actcustom||[]).map(function(c){
     return {id:c.id,name:c.name,cat:c.cat,day:c.day,precio:c.precio||"Consultar",rec:c.rec||"Todos",que:c.que||"",custom:true,web:c.link||"",foto:"",webq:"https://www.google.com/search?q="+encodeURIComponent(c.name)};
   });
