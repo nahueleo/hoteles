@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editar la guía</title>
+<style>
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7f9;color:#1d2430}
+  header{background:#1f6f5c;color:#fff;padding:18px 16px}
+  header h1{margin:0;font-size:1.2rem}
+  main{max-width:720px;margin:0 auto;padding:14px}
+  .card{background:#fff;border:1px solid #e3e7ee;border-radius:14px;padding:14px;margin-bottom:12px}
+  .card h3{margin:0 0 8px;font-size:1rem}
+  label{display:block;font-size:.8rem;color:#5b6675;margin-top:8px}
+  textarea,input{width:100%;box-sizing:border-box;padding:9px;border:1px solid #e3e7ee;border-radius:10px;font:inherit;margin-top:4px}
+  button{background:#1f6f5c;color:#fff;border:0;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer;font-size:.95rem}
+  .sticky{position:sticky;bottom:0;background:#f6f7f9;padding:10px 0}
+  #msg{font-size:.9rem;margin-left:10px}
+  .ok{color:#1f6f5c}.bad{color:#b42318}
+</style></head>
+<body>
+<header><h1>Editar precios y notas de la guía</h1></header>
+<main>
+  <div class="card">
+    <label>Clave de edición<input id="token" type="password" placeholder="Clave de admin"></label>
+    <p style="font-size:.8rem;color:#5b6675;margin:6px 0 0">Los cambios se guardan en la base de datos y se ven en la guía al recargarla.</p>
+  </div>
+  <div id="fields"></div>
+  <div class="sticky"><button id="save">Guardar cambios</button><span id="msg"></span></div>
+</main>
+<script>
+var ITEMS = [
+  ["laghetto","Laghetto Stilo Barra (ceia 24/12)"],["windsor","Windsor Barra"],["peregrino","Peregrino (Riale Brisa Barra)"],
+  ["picanha","Picanha & Etc"],["fratelli","Fratelli"],["granparrilla","Gran Parrilla"],["toca","Toca da Traíra"],
+  ["riobrasa","Rio Brasa"],["fogo","Fogo de Chão Barra"],["mocellin","Mocellin Mar"],["bangalo","Bangalô"]
+];
+var API = "/api/votes";
+function esc(s){return String(s||"").replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+var current = {};
+function build(){
+  var box = document.getElementById("fields");
+  box.innerHTML = ITEMS.map(function(it){
+    var c = current[it[0]] || {};
+    return '<div class="card" data-id="'+it[0]+'"><h3>'+esc(it[1])+'</h3>'
+      + '<label>Precio (línea corta)<input class="price" value="'+esc(c.price||"")+'"></label>'
+      + '<label>Nota (detalles, horario, niños)<textarea class="note" rows="3">'+esc(c.note||"")+'</textarea></label></div>';
+  }).join("");
+}
+fetch(API).then(function(r){return r.json();}).then(function(d){ current = d.content || {}; build(); })
+  .catch(function(){ build(); document.getElementById("msg").textContent="No se pudo cargar."; });
+document.getElementById("save").addEventListener("click", function(){
+  var msg = document.getElementById("msg");
+  var token = document.getElementById("token").value;
+  if(!token){ msg.className="bad"; msg.textContent="Escribe la clave."; return; }
+  var content = {};
+  document.querySelectorAll(".card[data-id]").forEach(function(c){
+    content[c.getAttribute("data-id")] = { price: c.querySelector(".price").value.trim(), note: c.querySelector(".note").value.trim() };
+  });
+  msg.className=""; msg.textContent="Guardando...";
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"saveContent",token:token,content:content})})
+    .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+    .then(function(x){
+      if(!x.ok){ msg.className="bad"; msg.textContent = x.j.error || "Error al guardar."; return; }
+      current = x.j.content || content; msg.className="ok"; msg.textContent="Guardado. Recarga la guía para verlo.";
+    }).catch(function(){ msg.className="bad"; msg.textContent="Error de conexión."; });
+});
+</script>
+</body></html>

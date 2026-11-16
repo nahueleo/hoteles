@@ -173,8 +173,8 @@
   <div class="body">
     <h3>Rio Brasa · Ayrton Senna</h3>
     <p class="meta">Churrascaria con rodízio · Av. Ayrton Senna 2541 · 5,9 km · 14 min</p>
-    <p class="price">Precio aprox.: <b>más de R$200 por persona</b> · Google 4,6</p>
-    <p class="note">Parquinho (reconfirmar edades).</p>
+    <p class="price">Ceia de Natal 24/12: <b>R$345 por persona</b> (confirmado por WhatsApp) · Google 4,6</p>
+    <p class="note">Incluye rodízio completo, 1 taça de vino o espumante, cortes, comida japonesa, frutos del mar y buffet. Bebidas y postres aparte. Entrada de 19h a 21h. Niños: hasta 5 años cortesía, 6 a 9 años 50 %, desde 10 años precio completo. Parquinho (reconfirmar).</p>
     <div class="row">
       <a class="btn alt" href="https://www.instagram.com/rio_brasa/" target="_blank" rel="noopener">Instagram</a>
     </div>
@@ -204,8 +204,8 @@
   <div class="body">
     <h3>Mocellin Mar <span class="badge">Frente al mar</span></h3>
     <p class="meta">Mariscos en rodízio · Av. do Pepê 40 · 6,1 km · 11 min · cena de Nochebuena anunciada</p>
-    <p class="price">Precio aprox.: <b>más de R$200 por persona</b> · Google 4,6</p>
-    <p class="note">Llamar: (21) 3129-1979 o WhatsApp (21) 99566-1163.</p>
+    <p class="price">Rodízio: <b>R$250 por persona + 12 % de servicio</b> (confirmado por WhatsApp; bebida y postre aparte) · Google 4,6</p>
+    <p class="note">Horario lunes a sábado 12h a 23h, domingo 12h a 22h. Valet R$20 en el local. Sin dato de la noche del 24. Llamar: (21) 3129-1979 o WhatsApp (21) 99566-1163.</p>
     <div class="row">
       <a class="btn alt" href="https://www.instagram.com/mocellinmar_/" target="_blank" rel="noopener">Instagram</a>
     </div>
@@ -229,6 +229,7 @@
 
 <h2 id="notas">Notas</h2>
 <div class="card"><div class="body">
+  <p class="note" style="margin:0 0 8px"><b>Actualizado:</b> Rio Brasa y Mocellin Mar respondieron por WhatsApp (ver arriba). Radisson Origens respondió que su atención ahora es sólo por el +55 21 3512-9508; aún sin respuesta sobre la ceia. Peregrino no tiene WhatsApp activo (+55 21 97139-3553).</p>
   <p class="note" style="margin:0">Las fotos son de Google Maps y pueden cambiar. Los precios de restaurantes son aproximados según indicadores de Google y Tripadvisor; sólo los de las ceias están confirmados en la web del evento. Confirma antes de comprar.</p>
 </div></div>
 
@@ -356,6 +357,28 @@
 
   document.addEventListener("DOMContentLoaded", function(){ buildAdd(); load(); });
   if (document.readyState !== "loading") { buildAdd(); load(); }
+})();
+</script>
+
+
+<script>
+(function(){
+  var MAP = {"laghetto":"Laghetto Stilo Barra","windsor":"Windsor Barra","peregrino":"Peregrino","picanha":"Picanha & Etc","fratelli":"Fratelli","granparrilla":"Gran Parrilla","toca":"Toca da Traíra","riobrasa":"Rio Brasa","fogo":"Fogo de Chão Barra","mocellin":"Mocellin Mar","bangalo":"Bangalô"};
+  fetch("/api/votes").then(function(r){return r.json();}).then(function(d){
+    var c = d.content || {};
+    document.querySelectorAll(".card").forEach(function(card){
+      var h = card.querySelector("h3"); if(!h) return;
+      var t = h.textContent.replace(/\s+/g," ").trim();
+      for (var id in MAP) {
+        if (t.indexOf(MAP[id]) === 0 && c[id]) {
+          var pr = card.querySelector(".price");
+          if (pr && c[id].price) pr.innerHTML = '<b>'+c[id].price.replace(/</g,"&lt;")+'</b>';
+          var nt = card.querySelector(".note");
+          if (nt && c[id].note) nt.textContent = c[id].note;
+        }
+      }
+    });
+  }).catch(function(){});
 })();
 </script>
 
