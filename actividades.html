@@ -233,7 +233,8 @@ function renderGrid(){
       ? '<img class="photo-img" src="'+esc(x.img)+'" alt="'+esc(x.name)+'" loading="lazy">'
       : '<div class="photo-ph"><div class="ph-ico">'+(CAT_ICON[x.cat]||ICON.camera)+'</div><b>'+esc(x.name)+'</b><a href="'+esc(x.foto||"#")+'" target="_blank" rel="noopener">'+ICON.camera+' Ver fotos</a></div>';
     var webBtn = x.web ? '<a class="ibtn" href="'+esc(x.web)+'" target="_blank" rel="noopener" title="Sitio web">'+ICON.globe+'</a>' : '';
-    var igBtn = x.ig ? '<a class="ibtn ig" href="'+esc(x.ig)+'" target="_blank" rel="noopener" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>' : x.igq ? '<a class="ibtn ig" href="https://www.instagram.com/explore/search/keyword/?q='+encodeURIComponent(x.igq)+'" target="_blank" rel="noopener" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>' : '';
+    var igHref = x.ig || ('https://www.instagram.com/explore/search/keyword/?q=' + encodeURIComponent((x.name||'') + ' Rio'));
+    var igBtn = '<a class="ibtn ig" href="' + esc(igHref) + '" target="_blank" rel="noopener" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>';
     return '<article class="card" id="'+esc(x.id)+'">'
       + '<div class="chips">'+catChip(x)+'</div>'
       + photo
