@@ -88,3 +88,26 @@
     if (!f.img && f.foto && f.foto.indexOf("lh3.googleusercontent.com")!==-1) f.img = f.foto;
   });
 })();
+// Instagram oficial de cada actividad (cuando existe una cuenta oficial verificada en búsqueda).
+(function(){
+  var IG = {
+    "d25-barra":"https://www.instagram.com/praiadabarra/",
+    "d26-cristo":"https://www.instagram.com/cristoredentoroficial/",
+    "d27-pao":"https://www.instagram.com/paodeacucar/",
+    "d28-buzios":"https://www.instagram.com/visitbuzioscvb/",
+    "d28-paraty":"https://www.instagram.com/paratycombr/",
+    "d29-ilha":"https://www.instagram.com/ilhagrande.oficial/",
+    "p-recreio":"https://www.instagram.com/praiadorecreio/",
+    "p-grumari":"https://www.instagram.com/grumari_beach/",
+    "p-joatinga":"https://www.instagram.com/praiadajoatinga.oficial/",
+    "a-jardimbotanico":"https://www.instagram.com/jardimbotanicorj/",
+    "a-parquelage":"https://www.instagram.com/parquelage/",
+    "a-museuamanha":"https://www.instagram.com/museudoamanha/",
+    "a-aquariorio":"https://www.instagram.com/aquariomarinhodorio/",
+    "a-zoo":"https://www.instagram.com/bioparquedorio/",
+    "a-barrashop":"https://www.instagram.com/barrashoppingoficial/",
+    "a-riodesign":"https://www.instagram.com/riodesignbarra/",
+    "a-villagemall":"https://www.instagram.com/villagemall/"
+  };
+  ACTIVITIES.forEach(function(a){ if (!a.ig && IG[a.id]) a.ig = IG[a.id]; });
+})();
