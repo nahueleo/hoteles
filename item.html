@@ -83,7 +83,7 @@ function renderRest(d){
     +   '<button class="btn" id="share">Compartir</button>'
     +   (d.ig?'<a class="btn ghost" href="'+esc(d.ig)+'" target="_blank" rel="noopener">Instagram</a>':'')
     +   (d.src?'<a class="btn ghost" href="'+esc(d.src)+'" target="_blank" rel="noopener">Fuente</a>':'')
-    +   '<a class="btn ghost" href="/cena">← Volver a cenas</a>'
+    +   '<a class="btn ghost" href="/cena" data-back="/cena">← Volver</a>'
     + '</div></div></article>';
 }
 
@@ -108,7 +108,7 @@ function renderAct(a){
     +   [26,27,28,29].map(function(d){ var done = dayMine.indexOf(a.id+"|"+d)!==-1; return '<button class="btn'+(done?' primary':'')+'" data-dvote="'+esc(a.id)+'" data-dday="'+d+'" '+(done?'disabled':'')+'>'+d+' dic · '+(dayvotes[a.id+"|"+d]||0)+'</button>'; }).join('')
     +   '</div><div class="row">'
     +   ((a.web||a.webq)?'<a class="btn ghost" href="'+esc(a.web||a.webq)+'" target="_blank" rel="noopener">'+(a.web?'Sitio web':'Buscar web')+'</a>':'')
-    +   '<a class="btn ghost" href="/actividades">← Volver a actividades</a>'
+    +   '<a class="btn ghost" href="/actividades" data-back="/actividades">← Volver</a>'
     + '</div></div></article>';
 }
 
@@ -161,6 +161,11 @@ function bindDayVotes(){
     });
   });
 }
+document.addEventListener("click", function(e){
+  var bk = e.target.closest && e.target.closest("[data-back]"); if (!bk) return;
+  var same = document.referrer && document.referrer.indexOf(location.host) !== -1;
+  if (same && history.length > 1) { e.preventDefault(); history.back(); }
+});
 if (!id) { location.replace("/actividades"); } else { render(); }
 fetch(API).then(function(r){return r.json();}).then(function(d){
   dayvotes = d.dayvotes||{};
