@@ -16,7 +16,7 @@ async function cmd(arr) {
 
 const ACT_ALLOWED = new Set(["d25-barra","d25-prainha","d26-cristo","d27-pao","d28-buzios","d28-paraty","d29-ilha"]);
 const FOOD_ALLOWED = new Set(["laghetto", "windsor", "radisson", "peregrino", "mocellin", "riobrasa", "picanha", "fratelli", "granparrilla", "toca", "fogo", "bangalo", "f-hotel-almuerzo", "f-gran-especial"]);
-const isAct = (id) => ACT_ALLOWED.has(id) || FOOD_ALLOWED.has(id) || /^u-[a-z0-9]{6,24}$/.test(String(id)) || /^p-[a-z]{4,12}$/.test(String(id));
+const isAct = (id) => ACT_ALLOWED.has(id) || FOOD_ALLOWED.has(id) || /^u-[a-z0-9]{6,24}$/.test(String(id)) || /^p-[a-z]{3,20}$/.test(String(id)) || /^r-[a-z]{3,20}$/.test(String(id)) || /^a-[a-z]{3,20}$/.test(String(id));
 
 const TOKEN_ADMIN = process.env.ADMIN_TOKEN;
 
@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
     }
     if (body.action === "dayvote") {
       const day = Number(body.day);
-      if (!isAct(body.id) || ![25, 26, 27, 28, 29].includes(day)) return res.status(400).json({ error: "Opción inválida" });
+      if (!isAct(body.id) || ![26, 27, 28, 29].includes(day)) return res.status(400).json({ error: "Opción inválida" });
       await cmd(["HINCRBY", "dayvotes", body.id + "|" + day, 1]);
       return res.status(200).json(await state());
     }
