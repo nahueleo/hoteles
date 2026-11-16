@@ -14,13 +14,22 @@ async function cmd(arr) {
   return j.result;
 }
 
+const TOKEN_ADMIN = process.env.ADMIN_TOKEN;
+
+async function getContent() {
+  const raw = await cmd(["GET", "content"]);
+  if (!raw) return {};
+  try { return JSON.parse(raw); } catch { return {}; }
+}
+
 async function state() {
   const hall = (await cmd(["HGETALL", "votes"])) || [];
   const likes = {};
   for (let i = 0; i < hall.length; i += 2) likes[hall[i]] = Number(hall[i + 1]);
   const raw = (await cmd(["LRANGE", "custom", 0, -1])) || [];
   const custom = raw.map((s) => { try { return JSON.parse(s); } catch { return null; } }).filter(Boolean);
-  return { likes, custom };
+  const content = await getContent();
+  return { likes, custom, content };
 }
 
 const clean = (s, max) => String(s || "").replace(/[<>]/g, "").trim().slice(0, max);
@@ -46,6 +55,18 @@ module.exports = async (req, res) => {
       const items = (await cmd(["LRANGE", "custom", 0, -1])) || [];
       if (items.length >= 50) return res.status(400).json({ error: "Ya hay demasiadas sugerencias" });
       await cmd(["RPUSH", "custom", JSON.stringify({ name, note, link, at: Date.now() })]);
+      return res.status(200).json(await state());
+    }
+    if (body.action === "saveContent") {
+      if (!TOKEN_ADMIN) return res.status(500).json({ error: "Falta configurar ADMIN_TOKEN en Vercel." });
+      if (body.token !== TOKEN_ADMIN) return res.status(401).json({ error: "Clave incorrecta" });
+      const incoming = body.content && typeof body.content === "object" ? body.content : {};
+      const clean2 = {};
+      for (const id of Object.keys(incoming)) {
+        if (!ALLOWED.has(id)) continue;
+        clean2[id] = { price: clean(incoming[id].price, 300), note: clean(incoming[id].note, 600) };
+      }
+      await cmd(["SET", "content", JSON.stringify(clean2)]);
       return res.status(200).json(await state());
     }
     return res.status(400).json({ error: "Acción inválida" });
