@@ -314,7 +314,7 @@ function renderCards(rows){
       + '<p class="meta"><b>Niños:</b> '+esc(d.kids)+' · <b>Vista al mar:</b> '+esc(d.mar)+'</p>'
       + '<p class="note">'+esc(noteText||'')+'</p>'
       + '<div class="row">'
-      + '<button class="likebtn'+(liked().indexOf(d.id)>-1?' on':'')+'" data-like="'+d.id+'" '+(liked().indexOf(d.id)>-1?'disabled':'')+'>♥ '+(liked().indexOf(d.id)>-1?'Te gusta':'Me gusta')+'</button>'
+      + '<button class="likebtn'+(liked().indexOf(d.id)>-1?' on':'')+'" data-like="'+d.id+'" title="'+(liked().indexOf(d.id)>-1?'Quitar mi voto':'Me gusta')+'">♥ '+(liked().indexOf(d.id)>-1?'Te gusta (quitar)':'Me gusta')+'</button>'
       + '<span class="note">'+(votes[d.id]||0)+' votos</span></div>'
       + '<div class="iconrow">'
       + (d.ig? '<a class="ibtn ig" href="'+esc(d.ig)+'" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">'+ICON_IG+'</a>':'')
@@ -352,12 +352,15 @@ function renderAll(){
 }
 
 function like(id, btn){
+  var undo = liked().indexOf(id)>-1;
   btn.disabled = true;
-  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"like",id:id})})
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:undo?"unlike":"like",id:id})})
     .then(function(r){return r.json();}).then(function(d){
-      var l = liked(); if (l.indexOf(id)===-1){ l.push(id); saveLiked(l); }
+      var l = liked();
+      if (undo) { l = l.filter(function(x){ return x!==id; }); } else if (l.indexOf(id)===-1){ l.push(id); }
+      saveLiked(l);
       votes = d.likes || votes; renderAll(); renderCustom(d.custom||[]);
-    }).catch(function(){ btn.disabled=false; document.getElementById("status").textContent="No se pudo registrar el like."; });
+    }).catch(function(){ btn.disabled=false; document.getElementById("status").textContent="No se pudo registrar el cambio."; });
 }
 
 function renderCustom(list){
