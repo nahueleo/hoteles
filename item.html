@@ -64,7 +64,7 @@ function renderRest(d){
   var price = d.precio==null ? "Precio no verificado" : "R$ "+d.precio.toLocaleString("es-AR")+(d.est?" (est.)":"");
   var total = d.total==null ? "—" : "R$ "+d.total.toLocaleString("es-AR")+(d.totalest?" (est.)":"");
   var dist = d.km===0 ? "En el hotel" : d.km.toFixed(1)+" km · "+d.min+" min en auto";
-  var map = 'https://www.google.com/maps?q='+encodeURIComponent(d.q)+'&output=embed';
+  var map = 'https://www.google.com/maps?saddr='+encodeURIComponent('Hotel Laghetto Stilo Barra, Rua Marcelo Roberto 65, Barra da Tijuca, Rio de Janeiro')+'&daddr='+encodeURIComponent(d.q)+'&output=embed';
   return '<article class="item"><div class="cover">'+(d.foto?'<img src="'+esc(d.foto)+'" alt="'+esc(d.name)+'">':'Sin foto cargada')+'</div>'
     + '<div class="body">'
     + '<div class="chips"><span class="chip">'+esc(d.tipo)+'</span>'+(d.hotel?'<span class="chip day">Hotel</span>':'')+'<span class="chip '+(d.cena==="ok"?'':'day')+'">Cena 24: '+(d.cena==="ok"?'confirmada':'sin respuesta aún')+'</span></div>'
