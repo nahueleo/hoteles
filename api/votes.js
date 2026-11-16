@@ -15,6 +15,7 @@ async function cmd(arr) {
 }
 
 const ACT_ALLOWED = new Set(["d25-barra","d25-prainha","d26-cristo","d27-pao","d28-buzios","d28-paraty","d29-ilha"]);
+const isAct = (id) => ACT_ALLOWED.has(id) || /^u-[a-z0-9]{6,24}$/.test(String(id));
 
 const TOKEN_ADMIN = process.env.ADMIN_TOKEN;
 
@@ -33,8 +34,13 @@ async function state() {
   const ah = (await cmd(["HGETALL", "actvotes"])) || [];
   const actlikes = {};
   for (let i = 0; i < ah.length; i += 2) actlikes[ah[i]] = Number(ah[i + 1]);
+  const dh = (await cmd(["HGETALL", "dayvotes"])) || [];
+  const dayvotes = {};
+  for (let i = 0; i < dh.length; i += 2) dayvotes[dh[i]] = Number(dh[i + 1]);
   const content = await getContent();
-  return { likes, custom, content, actlikes };
+  const ac = (await cmd(["LRANGE", "actcustom", 0, -1])) || [];
+  const actcustom = ac.map((x) => { try { return JSON.parse(x); } catch { return null; } }).filter(Boolean);
+  return { likes, custom, content, actlikes, dayvotes, actcustom };
 }
 
 const clean = (s, max) => String(s || "").replace(/[<>]/g, "").trim().slice(0, max);
@@ -52,8 +58,27 @@ module.exports = async (req, res) => {
       return res.status(200).json(await state());
     }
     if (body.action === "actlike") {
-      if (!ACT_ALLOWED.has(body.id)) return res.status(400).json({ error: "Actividad inválida" });
+      if (!isAct(body.id)) return res.status(400).json({ error: "Actividad inválida" });
       await cmd(["HINCRBY", "actvotes", body.id, 1]);
+      return res.status(200).json(await state());
+    }
+    if (body.action === "actadd") {
+      const name = clean(body.name, 80);
+      if (!name) return res.status(400).json({ error: "Falta el nombre" });
+      const cat = ["playa", "atraccion", "excursion"].includes(body.cat) ? body.cat : "atraccion";
+      const day = [25, 26, 27, 28, 29].includes(Number(body.day)) ? Number(body.day) : 0;
+      const item = { id: "u-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, cat, day,
+        precio: clean(body.precio, 120), rec: clean(body.rec, 120), que: clean(body.que, 300), link: clean(body.link, 300), at: Date.now() };
+      if (item.link && !/^https?:\/\//.test(item.link)) return res.status(400).json({ error: "El link debe empezar con https://" });
+      const items = (await cmd(["LRANGE", "actcustom", 0, -1])) || [];
+      if (items.length >= 60) return res.status(400).json({ error: "Ya hay demasiadas sugerencias" });
+      await cmd(["RPUSH", "actcustom", JSON.stringify(item)]);
+      return res.status(200).json(await state());
+    }
+    if (body.action === "dayvote") {
+      const day = Number(body.day);
+      if (!isAct(body.id) || ![25, 26, 27, 28, 29].includes(day)) return res.status(400).json({ error: "Opción inválida" });
+      await cmd(["HINCRBY", "dayvotes", body.id + "|" + day, 1]);
       return res.status(200).json(await state());
     }
     if (body.action === "add") {
