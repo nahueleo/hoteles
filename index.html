@@ -378,6 +378,11 @@
   var MAP = {"laghetto":"Laghetto Stilo Barra","windsor":"Windsor Barra","peregrino":"Peregrino","picanha":"Picanha & Etc","fratelli":"Fratelli","granparrilla":"Gran Parrilla","toca":"Toca da Traíra","riobrasa":"Rio Brasa","fogo":"Fogo de Chão Barra","mocellin":"Mocellin Mar","bangalo":"Bangalô"};
   fetch("/api/votes").then(function(r){return r.json();}).then(function(d){
     var c = d.content || {};
+    if (c.general) {
+      var box = document.getElementById("general-notes");
+      if (!box) { box = document.createElement("div"); box.id = "general-notes"; box.className = "card"; box.innerHTML = '<div class="body"><h3>Actualizaciones</h3><p class="note" style="white-space:pre-line;margin:0"></p></div>'; var n = document.getElementById("notas"); if (n) n.parentNode.insertBefore(box, n.nextSibling); }
+      box.querySelector("p").textContent = c.general;
+    }
     document.querySelectorAll(".card").forEach(function(card){
       var h = card.querySelector("h3"); if(!h) return;
       var t = h.textContent.replace(/\s+/g," ").trim();

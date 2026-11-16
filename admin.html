@@ -22,6 +22,8 @@
     <label>Clave de edición<input id="token" type="password" placeholder="Clave de admin"></label>
     <p style="font-size:.8rem;color:#5b6675;margin:6px 0 0">Los cambios se guardan en la base de datos y se ven en la guía al recargarla.</p>
   </div>
+  <div class="card"><h3>Notas generales (se muestran al final de la guía)</h3>
+    <textarea id="general" rows="6" placeholder="Ej: Radisson confirmó la ceia..."></textarea></div>
   <div id="fields"></div>
   <div class="sticky"><button id="save">Guardar cambios</button><span id="msg"></span></div>
 </main>
@@ -43,13 +45,14 @@ function build(){
       + '<label>Nota (detalles, horario, niños)<textarea class="note" rows="3">'+esc(c.note||"")+'</textarea></label></div>';
   }).join("");
 }
-fetch(API).then(function(r){return r.json();}).then(function(d){ current = d.content || {}; build(); })
+fetch(API).then(function(r){return r.json();}).then(function(d){ current = d.content || {}; document.getElementById("general").value = current.general || ""; build(); })
   .catch(function(){ build(); document.getElementById("msg").textContent="No se pudo cargar."; });
 document.getElementById("save").addEventListener("click", function(){
   var msg = document.getElementById("msg");
   var token = document.getElementById("token").value;
   if(!token){ msg.className="bad"; msg.textContent="Escribe la clave."; return; }
   var content = {};
+  content.general = document.getElementById("general").value.trim();
   document.querySelectorAll(".card[data-id]").forEach(function(c){
     content[c.getAttribute("data-id")] = { price: c.querySelector(".price").value.trim(), note: c.querySelector(".note").value.trim() };
   });
