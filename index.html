@@ -235,5 +235,129 @@
 </main>
 
 <footer>Datos recopilados el 16/11/2026 desde Google, webs oficiales, Sympla e Instagram.</footer>
+
+<style>
+  .likebar { display:flex; align-items:center; gap:10px; padding:0 14px 14px; }
+  .likebtn { border:1px solid #1f6f5c; background:#fff; color:#1f6f5c; border-radius:999px; padding:7px 14px; font-weight:600; font-size:.88rem; cursor:pointer; }
+  .likebtn.on { background:#1f6f5c; color:#fff; }
+  .likebtn[disabled] { opacity:.6; cursor:default; }
+  .addbox { background:#fff; border:1px solid #e3e7ee; border-radius:14px; padding:14px; margin:14px 0; }
+  .addbox input, .addbox textarea { width:100%; padding:10px; border:1px solid #e3e7ee; border-radius:10px; font:inherit; margin-top:6px; }
+  .addbox button { margin-top:10px; background:#1f6f5c; color:#fff; border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; }
+  .custom-tag { font-size:.75rem; color:#b7791f; font-weight:600; }
+  #status { font-size:.85rem; color:#5b6675; margin-top:6px; }
+</style>
+<script>
+(function(){
+  var IDS = {
+    "Laghetto Stilo Barra": "laghetto", "Windsor Barra": "windsor", "Peregrino": "peregrino",
+    "Picanha & Etc": "picanha", "Fratelli": "fratelli", "Gran Parrilla": "granparrilla",
+    "Toca da Traíra": "toca", "Rio Brasa · Ayrton Senna": "riobrasa", "Fogo de Chão Barra": "fogo",
+    "Mocellin Mar": "mocellin", "Bangalô": "bangalo"
+  };
+  var API = "/api/votes";
+  var LIKED_KEY = "liked-v1";
+  function liked(){ try { return JSON.parse(localStorage.getItem(LIKED_KEY) || "[]"); } catch(e){ return []; } }
+  function saveLiked(list){ try { localStorage.setItem(LIKED_KEY, JSON.stringify(list)); } catch(e){} }
+
+  function cardId(card){
+    var h = card.querySelector("h3");
+    if(!h) return null;
+    var t = h.textContent.replace(/\s+/g," ").trim();
+    for (var k in IDS) { if (t.indexOf(k.replace(/&amp;/g,"&")) === 0 || t === k) return IDS[k]; }
+    return null;
+  }
+
+  function render(counts){
+    document.querySelectorAll(".card").forEach(function(card){
+      var id = cardId(card);
+      if(!id) return;
+      var btn = card.querySelector(".likebtn");
+      if(!btn){
+        var bar = document.createElement("div");
+        bar.className = "likebar";
+        bar.innerHTML = '<button class="likebtn" data-id="'+id+'">♥ Me gusta</button><span class="cnt" data-cnt="'+id+'"></span>';
+        card.appendChild(bar);
+        btn = bar.querySelector(".likebtn");
+        btn.addEventListener("click", function(){ like(id, btn); });
+      }
+      var n = (counts && counts[id]) ? counts[id] : 0;
+      card.querySelector('[data-cnt="'+id+'"]').textContent = n + (n === 1 ? " like" : " likes");
+      if (liked().indexOf(id) !== -1) { btn.classList.add("on"); btn.textContent = "♥ Te gusta"; btn.disabled = true; }
+    });
+  }
+
+  function load(){
+    fetch(API).then(function(r){ return r.json(); }).then(function(d){
+      render(d.likes || {});
+      renderCustom(d.custom || []);
+    }).catch(function(){ render({}); document.getElementById("status").textContent = "No se pudieron cargar los likes."; });
+  }
+
+  function like(id, btn){
+    btn.disabled = true;
+    fetch(API, {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({action:"like", id:id})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var l = liked(); if (l.indexOf(id) === -1) { l.push(id); saveLiked(l); }
+        render(d.likes || {});
+      }).catch(function(){ btn.disabled = false; document.getElementById("status").textContent = "No se pudo registrar el like."; });
+  }
+
+  function renderCustom(list){
+    var box = document.getElementById("custom-list");
+    if(!box) return;
+    box.innerHTML = "";
+    list.forEach(function(o){
+      var c = document.createElement("div");
+      c.className = "card";
+      c.innerHTML = '<div class="body"><h3>'+esc(o.name)+' <span class="custom-tag">Sugerido por el grupo</span></h3>'
+        + '<p class="note" style="margin:4px 0">'+esc(o.note||"")+'</p>'
+        + (o.link ? '<div class="row"><a class="btn alt" href="'+esc(o.link)+'" target="_blank" rel="noopener">Ver link</a></div>' : '') + '</div>';
+      box.appendChild(c);
+    });
+  }
+
+  function esc(s){ return String(s||"").replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+  function buildAdd(){
+    var main = document.querySelector("main");
+    var sec = document.createElement("section");
+    sec.innerHTML = '<h2>Agregar una opción</h2>'
+      + '<div class="addbox">'
+      + '<label>Nombre del lugar<input id="add-name" maxlength="60" placeholder="Ej: Restaurante X"></label>'
+      + '<label>Nota o precio aprox.<textarea id="add-note" rows="2" maxlength="200" placeholder="Ej: buffet, R$300 pp, tiene espacio kids"></textarea></label>'
+      + '<label>Link (Instagram, Maps o web)<input id="add-link" maxlength="300" placeholder="https://..."></label>'
+      + '<button id="add-btn">Agregar</button>'
+      + '<div id="status"></div></div>'
+      + '<h2>Sugerencias del grupo</h2><div id="custom-list"></div>';
+    var notas = document.getElementById("notas");
+    main.insertBefore(sec, notas);
+    document.getElementById("add-btn").addEventListener("click", addOption);
+  }
+
+  function addOption(){
+    var name = document.getElementById("add-name").value.trim();
+    var note = document.getElementById("add-note").value.trim();
+    var link = document.getElementById("add-link").value.trim();
+    var st = document.getElementById("status");
+    if(!name){ st.textContent = "Escribe un nombre."; return; }
+    if(link && !/^https?:\/\//.test(link)){ st.textContent = "El link debe empezar con https://"; return; }
+    st.textContent = "Guardando...";
+    fetch(API, {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({action:"add", name:name, note:note, link:link})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d.error){ st.textContent = d.error; return; }
+        document.getElementById("add-name").value = ""; document.getElementById("add-note").value = ""; document.getElementById("add-link").value = "";
+        st.textContent = "Listo, agregado.";
+        renderCustom(d.custom || []);
+      }).catch(function(){ st.textContent = "No se pudo guardar."; });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){ buildAdd(); load(); });
+  if (document.readyState !== "loading") { buildAdd(); load(); }
+})();
+</script>
+
 </body>
 </html>
