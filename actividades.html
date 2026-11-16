@@ -3,204 +3,318 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Actividades 25 al 29 de diciembre · Río de Janeiro</title>
+<title>Actividades y comidas 26 al 29 de diciembre · Río de Janeiro</title>
 <link rel="stylesheet" href="/css/site.css">
 <style>
-.photo{height:150px;border-radius:12px;background:linear-gradient(135deg,#cfe7df,#f1e6cf);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--brand);font-weight:600;font-size:.9rem;border:1px dashed #9fc7bb}
-.photo:hover{border-style:solid}
+.photo{height:150px;border-radius:12px;background:linear-gradient(135deg,#cfe7df,#f1e6cf);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--brand);font-weight:600;border:1px dashed var(--line)}
+.photo-ph{height:160px;border-radius:12px;background:linear-gradient(135deg,#cfe7df,#f1e6cf);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px;text-align:center;color:var(--brand)}
+.photo-ph b{font-size:.92rem;color:var(--ink)}
+.photo-ph a{font-size:.8rem;display:inline-flex;align-items:center;gap:5px}
+.ph-ico{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--brand)}
+.photo-img{width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;background:#eef3f1}
 .facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.84rem}
-.facts div{background:var(--bg);border-radius:10px;padding:8px 10px}
-.facts b{display:block;color:var(--muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px}
-.rec{font-size:.88rem;margin:0}
-.badge-u{font-size:.7rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.4px}
+.facts div{background:var(--bg);border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:flex-start}
+.facts svg{flex:none;margin-top:2px;color:var(--brand)}
+.facts b{display:block;color:var(--muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.4px}
+.ico{display:inline-flex;align-items:center;gap:6px}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--brand);cursor:pointer;text-decoration:none;transition:.15s}
+.ibtn:hover{background:var(--brand-2);border-color:var(--brand)}
+.ibtn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.ibtn.ig{color:#c13584}
+.iconrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.likecount{font-size:.84rem;color:var(--muted);font-weight:600}
+.dayrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.dayrow .dlabel{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;color:var(--muted);font-weight:600;margin-right:2px}
+.dbtn{font:inherit;font-size:.8rem;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.dbtn:hover:not(:disabled){border-color:var(--brand)}
+.dbtn:disabled{cursor:default}
+.dbtn.done{background:var(--brand-2);border-color:var(--brand);color:var(--brand)}
+.seg button svg{vertical-align:-3px;margin-right:4px}
+.note-banner{display:flex;gap:10px;align-items:flex-start;background:#fff8e6;border:1px solid #f0dca4;border-radius:12px;padding:12px 14px;font-size:.88rem;margin-top:18px}
+.note-banner svg{flex:none;color:#9a6b00;margin-top:2px}
 .form{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-top:34px}
-.form h2{margin:0 0 4px;font-size:1.15rem}
+.form h2{margin:0 0 4px;font-size:1.15rem;display:flex;align-items:center;gap:8px}
 .fgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:14px}
 .fgrid label{display:flex;flex-direction:column;gap:5px;font-size:.84rem;color:var(--muted);font-weight:600}
 .fgrid input,.fgrid select,.fgrid textarea{font:inherit;font-size:.92rem;color:var(--ink);padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff}
 .fgrid textarea{min-height:70px;resize:vertical}
 .fgrid .full{grid-column:1/-1}
 .msg{font-size:.88rem;color:var(--muted);margin-top:10px;min-height:1.2em}
-.dayrow{display:flex;gap:6px;flex-wrap:wrap}
-.dayrow .btn{padding:6px 10px;font-size:.82rem}
-.photo-img{width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;background:#eef3f1}
+.cal .day header{display:flex;justify-content:space-between;align-items:center}
+.cal .day ol{margin:4px 0 10px;padding-left:18px;font-size:.9rem}
+.cal .day li{display:flex;justify-content:space-between;gap:8px}
+.viewtabs{display:flex;gap:8px;margin:18px 0 6px}.viewtabs button{font:inherit;font-weight:600;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}.viewtabs button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.cal li a{color:inherit;text-decoration:none;font-weight:600}
+.cal li a:hover{text-decoration:underline;color:var(--brand)}
+.cal .n{font-weight:700;color:var(--brand)}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="wrap">
   <a class="brand" href="/">Navidad en Río<small>Barra da Tijuca · 2026</small></a>
-  <nav class="menu">
-    <a href="/">Inicio</a><a href="/cena">Cena</a><a class="on" href="/actividades">Actividades</a><a href="/dias">Días y votos</a>
-  </nav>
+  <nav class="menu"><a href="/">Inicio</a><a href="/cena">Cena Navidad</a><a class="on" href="/actividades">Actividades y comidas</a></nav>
 </div></header>
 
 <section class="hero"><div class="wrap">
-  <h1>Actividades del 25 al 29 de diciembre</h1>
-  <p>Playas, atracciones y excursiones desde Barra da Tijuca. Votá las que más te gusten, sugerí otras y mirá en la página de días en qué fecha conviene hacer cada una.</p>
+  <h1>Actividades y comidas</h1>
+  <p>Playas, atracciones, excursiones y restaurantes de la zona. Votá qué querés hacer o comer y en qué día. El calendario muestra lo más votado de cada día.</p>
   <div class="stats">
-    <div class="stat"><b id="st-total">0</b>actividades</div>
-    <div class="stat"><b id="st-sug">0</b>sugeridas por el grupo</div>
-    <div class="stat"><b id="st-votes">0</b>votos</div>
+    <div class="stat"><b id="st-acts">0</b><span>Actividades</span></div>
+    <div class="stat"><b id="st-food">0</b><span>Comidas</span></div>
+    <div class="stat"><b id="st-days">0</b><span>Votos por día</span></div>
+    <div class="stat"><b id="st-mine">0</b><span>Tus votos</span></div>
   </div>
 </div></section>
 
 <main class="wrap">
-  <div class="toolbar">
-    <div class="seg" id="cat-seg" role="tablist">
-      <button class="on" data-cat="all">Todas</button>
-      <button data-cat="playa">Playas y naturaleza</button>
-      <button data-cat="atraccion">Atracciones</button>
-      <button data-cat="excursion">Excursiones</button>
-    </div>
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <select class="sel" id="sort-sel" aria-label="Orden">
-        <option value="votes">Más votadas</option>
-        <option value="dist">Más cerca</option>
-        <option value="name">Nombre (A–Z)</option>
-      </select>
-    </div>
+  <div class="viewtabs"><button class="on" data-view="cal">Calendario</button><button data-view="opt">Todas las opciones</button></div>
+  <div id="view-cal">
+<h2 class="sec-title"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Lo más votado por día</span></h2>
+  <div class="cal" id="cal" style="grid-template-columns:repeat(4,1fr)"></div>
   </div>
-  <div class="grid" id="grid"></div>
-
-  <section class="form" id="sugerir">
-    <h2>Sugerir una actividad</h2>
-    <p class="note" style="margin:0">Agregá una opción para que el grupo la vote. Quedará visible para todos.</p>
-    <div class="fgrid">
-      <label>Nombre<input id="s-name" maxlength="80" placeholder="Ej: Jardim Botânico"></label>
-      <label>Tipo
-        <select id="s-cat"><option value="playa">Playa y naturaleza</option><option value="atraccion" selected>Atracción</option><option value="excursion">Excursión</option></select></label>
-      <label>Precio aprox.<input id="s-precio" maxlength="120" placeholder="Ej: R$ 60 pp"></label>
-      <label>Recomendado para<input id="s-rec" maxlength="120" placeholder="Ej: familias con niños"></label>
-      <label class="full">Descripción<textarea id="s-que" maxlength="300" placeholder="Qué tiene, cómo llegar, distancia..."></textarea></label>
-      <label class="full">Link (web o Instagram)<input id="s-link" maxlength="300" placeholder="https://..."></label>
+  <div id="view-opt" hidden>
+<h2 class="sec-title"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M12 3v18"/></svg>Todas las opciones</span></h2>
+  <div class="toolbar">
+    <div class="seg" id="cat-seg">
+      <button class="on" data-f="all">Todo</button>
+      <button data-f="playa">Playas</button>
+      <button data-f="atraccion">Atracciones</button>
+      <button data-f="excursion">Excursiones</button>
+      <button data-f="lunch">Almuerzo</button>
+      <button data-f="dinner">Cena</button>
     </div>
-    <div style="margin-top:14px"><button class="btn primary" id="s-btn">Enviar sugerencia</button></div>
-    <div class="msg" id="s-msg"></div>
-  </section>
+    <select class="sel" id="sort" aria-label="Ordenar">
+      <option value="votes">Más votados</option>
+      <option value="name">Nombre</option>
+    </select>
+  </div>
+  <div class="note-banner">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    <span>Precios y distancias marcados como "Consultar" o "Por confirmar" hay que verificarlos antes de ir. Los demás vienen de fuentes públicas.</span>
+  </div>
+  <div class="grid" id="grid" style="margin-top:14px"></div>
 
-  <p class="note" style="margin-top:22px">Distancias aproximadas en auto desde el hotel. Precios orientativos de webs de viaje y operadores: confirmá antes de reservar. Las fotos abren una búsqueda de imágenes.</p>
+  <div class="form">
+    <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Sugerí otra opción</h2>
+    <p class="note" style="margin:0">Si conocés una playa, un lugar para comer o una excursión, agregala para que el grupo la vote.</p>
+    <div class="fgrid">
+      <label>Nombre<input id="f-name" maxlength="80" placeholder="Ej: Praia do Pepê"></label>
+      <label>Tipo<select id="f-cat"><option value="playa">Playa y naturaleza</option><option value="atraccion">Atracción</option><option value="excursion">Excursión</option><option value="comida">Almuerzo o cena</option></select></label>
+      <label>Precio aprox.<input id="f-precio" maxlength="120" placeholder="Ej: Gratis / R$ 80 pp"></label>
+      <label>Recomendado para<input id="f-rec" maxlength="120" placeholder="Ej: Niños, familia"></label>
+      <label class="full">Descripción<textarea id="f-que" maxlength="300" placeholder="Qué tiene, cómo llegar..."></textarea></label>
+      <label class="full">Link (opcional)<input id="f-link" maxlength="300" placeholder="https://..."></label>
+    </div>
+    <div><button class="btn" id="f-send">Enviar sugerencia</button></div>
+    <div class="msg" id="f-msg"></div>
+  </div>
+  </div>
 </main>
 
 <div class="toast" id="toast"></div>
-<footer class="footer">Datos del grupo · actualizado el 16/11/2026</footer>
+<footer class="footer">Los votos se guardan para todo el grupo.</footer>
 
 <script src="/js/data.js"></script>
+<script src="/js/zona.js"></script>
 <script src="/js/common.js"></script>
 <script>
-var DAYS = [25,26,27,28,29];
-var state = { cat: "all", sort: "votes", votes: {}, dayvotes: {}, liked: getJSON("actliked-v1", []), custom: [], mineDays: getJSON("dayvoted-v1", []) };
-function dv(id, d){ return state.dayvotes[id+"|"+d] || 0; }
-function topDay(id){
-  var best = null;
-  DAYS.forEach(function(d){ var n = dv(id,d); if (n>0 && (!best || n>best.n)) best = {d:d,n:n}; });
-  return best;
+var ICON = {
+  heart:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  share:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>',
+  link:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>',
+  globe:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>',
+  pin:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  tag:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg>',
+  users:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>',
+  cal:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  camera:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  food:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v7a3 3 0 0 0 6 0V2M6 2v20M18 15V2c-2 0-4 3-4 7s2 4 4 4v9"/></svg>',
+  beach:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 20c2 0 2-1.5 4-1.5S8 20 10 20s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M12 15V4M12 4c3 0 6 2 6 6"/></svg>',
+  mount:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20l6-10 4 6 3-4 5 8z"/></svg>',
+  bus:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="15" rx="2"/><path d="M4 11h16M8 21l-1-3M16 21l1-3"/></svg>'
+};
+var CAT_ICON = { playa:ICON.beach, atraccion:ICON.mount, excursion:ICON.bus, comida:ICON.food };
+var DAYS = [26,27,28,29];
+var KIND_TITLE = { act:"Actividades", lunch:"Almuerzo", dinner:"Cena" };
+var state = { f:"all", sort:"votes", dayvotes:{}, votes:{}, custom:[], actcustom:[],
+  liked:getJSON("actliked-v1",[]), mineDays:getJSON("dayvoted-v1",[]) };
+
+function isFood(x){ return x.cat==="comida"; }
+function mealOf(x){ return x.meal || "cena"; }
+function isLunch(x){ return isFood(x) && (mealOf(x)==="almuerzo" || mealOf(x)==="ambos"); }
+function isDinner(x){ return isFood(x) && (mealOf(x)==="cena" || mealOf(x)==="ambos"); }
+function kindsOf(x){ var k=[]; if(!isFood(x)) k.push("act"); if(isLunch(x)) k.push("lunch"); if(isDinner(x)) k.push("dinner"); return k; }
+function allItems(){
+  var acts = ACTIVITIES.concat(state.actcustom.map(function(c){ return {id:c.id,name:c.name,cat:c.cat,day:c.day,que:c.que||"",precio:c.precio||"Consultar",rec:c.rec||"",dist:"Por confirmar",foto:"",web:c.link||"",custom:true}; }));
+  return acts.concat(FOOD);
 }
-function dayVote(id, d, btn){
-  btn.disabled = true;
-  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"dayvote",id:id,day:d})})
-    .then(function(r){return r.json();}).then(function(res){
-      state.mineDays.push(id+"|"+d); setJSON("dayvoted-v1", state.mineDays);
-      state.dayvotes = res.dayvotes || state.dayvotes; render(); toast("Voto registrado para el "+d);
-    }).catch(function(){ btn.disabled=false; toast("No se pudo registrar el voto"); });
-}
-function all(){ return ACTIVITIES.concat(state.custom.map(function(c){ return {id:c.id,name:c.name,cat:c.cat,day:c.day,precio:c.precio||"Consultar",rec:c.rec||"Todos",que:c.que||"",km:null,dist:"Distancia por confirmar",web:c.link||"",foto:"https://www.google.com/search?tbm=isch&q="+encodeURIComponent(c.name),webq:"https://www.google.com/search?q="+encodeURIComponent(c.name),custom:true}; })); }
-function visible(){
-  return all().filter(function(a){
-    return (state.cat==="all" || a.cat===state.cat);
-  }).sort(function(x,y){
-    if (state.sort==="votes") return (state.votes[y.id]||0)-(state.votes[x.id]||0);
-    if (state.sort==="dist") return (x.km==null?999:x.km)-(y.km==null?999:y.km);
-    return x.name.localeCompare(y.name);
-  });
-}
-function card(a){
-  var voted = state.liked.indexOf(a.id) !== -1;
-  var n = state.votes[a.id] || 0;
-  var top = topDay(a.id);
-  var mine = state.mineDays;
-  var dayBtns = DAYS.map(function(d){
-    var done = mine.indexOf(a.id+"|"+d)!==-1;
-    return '<button class="btn" data-dayvote="'+esc(a.id)+'" data-day="'+d+'" '+(done?'disabled':'')+' style="'+(done?'background:var(--brand-2);border-color:var(--brand);color:var(--brand)':'')+'">'+d+' · '+dv(a.id,d)+'</button>';
+function dv(id,d){ return state.dayvotes[id+"|"+d] || 0; }
+function lv(id){ return state.votes[id] || 0; }
+
+function renderCalendar(){
+  var all = allItems();
+  document.getElementById("cal").innerHTML = DAYS.map(function(d){
+    var blocks = ["act","lunch","dinner"].map(function(k){
+      var ranked = all.filter(function(x){ return kindsOf(x).indexOf(k)!==-1; })
+        .map(function(x){ return {x:x,n:dv(x.id,d)}; }).filter(function(r){ return r.n>0; })
+        .sort(function(a,b){ return b.n-a.n || a.x.name.localeCompare(b.x.name); }).slice(0,3);
+      var body = ranked.length ? '<ol>'+ranked.map(function(r){ return '<li><a href="/item?id='+encodeURIComponent(r.x.id)+'">'+esc(r.x.name)+'</a><span class="n">'+r.n+'</span></li>'; }).join("")+'</ol>' : '<div class="empty">Sin votos</div>';
+      return '<div class="cat-h">'+KIND_TITLE[k]+'</div>'+body;
+    }).join("");
+    return '<div class="day"><header><b>'+d+' dic</b><span>X</span></header>'+blocks+'</div>';
   }).join("");
-  return '<article class="card" id="'+esc(a.id)+'">'
-    + '<div class="chips"><span class="chip cat-'+esc(a.cat)+'">'+esc(catLabel(a.cat))+'</span>'+(a.custom?'<span class="badge-u">Sugerida por el grupo</span>':'')+'</div>'
-    + (a.img ? '<img class="photo-img" src="'+esc(a.img)+'" alt="'+esc(a.name)+'" loading="lazy">' : '<a class="photo" href="'+esc(a.foto)+'" target="_blank" rel="noopener">Ver fotos de '+esc(a.name)+'</a>')
-    + '<h3>'+esc(a.name)+'</h3>'
-    + '<div class="facts">'
-    +   '<div><b>Distancia</b>'+esc(a.dist||(a.km!=null?'~'+a.km+' km':'Por confirmar'))+'</div>'
-    +   '<div><b>Precio</b>'+esc(a.precio)+'</div>'
-    + '</div>'
-    + '<p class="rec"><b>Recomendado para:</b> '+esc(a.rec||'Todos')+'</p>'
-    + '<p class="desc">'+esc(a.que)+'</p>'
-    + '<p class="note" style="margin:0">'+(top ? 'Día más votado: <b>'+top.d+' dic</b> ('+top.n+' votos)' : 'Todavía sin día votado')+'</p>'
-    + '<p class="note" style="margin:6px 0 0">¿Qué día te gustaría ir?</p>'
-    + '<div class="dayrow">'+dayBtns+'</div>'
-    + '<div class="actions">'
-    +   '<button class="btn primary" data-vote="'+esc(a.id)+'" '+(voted?'disabled':'')+'>'+(voted?'✓ Votado':'Votar')+' <span class="count">· '+n+'</span></button>'
-    +   '<button class="btn" data-share="'+esc(a.id)+'">Compartir</button>'
-    +   (a.web?'<a class="btn ghost" href="'+esc(a.web)+'" target="_blank" rel="noopener">Sitio web</a>':'')
-    + '</div></article>';
+  var total=0; for (var k in state.dayvotes) total+=state.dayvotes[k];
+  document.getElementById("st-days").textContent = total;
+  document.getElementById("st-mine").textContent = state.mineDays.length;
+  var acts = allItems().filter(function(x){ return !isFood(x); }).length;
+  var food = allItems().filter(isFood).length;
+  document.getElementById("st-acts").textContent = acts;
+  document.getElementById("st-food").textContent = food;
 }
-function render(){
-  var list = visible();
-  document.getElementById("grid").innerHTML = list.length ? list.map(card).join("") : '<p class="note">No hay actividades con esos filtros. Podés sugerir una abajo.</p>';
-  document.getElementById("st-total").textContent = all().length;
-  document.getElementById("st-sug").textContent = state.custom.length;
-  var total = 0; for (var k in state.votes) total += state.votes[k];
-  document.getElementById("st-votes").textContent = total;
+
+function filtered(){
+  var f = state.f;
+  var list = allItems().filter(function(x){
+    if (f==="all") return true;
+    if (f==="lunch") return isLunch(x);
+    if (f==="dinner") return isDinner(x);
+    return x.cat===f;
+  });
+  if (state.sort==="name") list.sort(function(a,b){ return a.name.localeCompare(b.name); });
+  else list.sort(function(a,b){ return (lv(b.id)-lv(a.id)) || a.name.localeCompare(b.name); });
+  return list;
 }
-function vote(id, btn){
-  btn.disabled = true;
-  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"actlike",id:id})})
-    .then(function(r){return r.json();}).then(function(d){
-      state.liked.push(id); setJSON("actliked-v1", state.liked);
-      state.votes = d.actlikes || state.votes; render(); toast("Voto registrado");
-    }).catch(function(){ btn.disabled=false; toast("No se pudo registrar el voto"); });
+
+function extraFacts(x){
+  var out="";
+  var star='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z"/></svg>';
+  if (x.g) out+='<div>'+star+'<span><b>Google</b>'+esc(x.g)+' / 5</span></div>';
+  if (x.kids) out+='<div>'+ICON.users+'<span><b>Niños</b>'+esc(x.kids)+'</span></div>';
+  if (x.totaltxt) out+='<div>'+ICON.users+'<span><b>Total grupo (15)</b>'+esc(x.totaltxt)+'</span></div>';
+  if (x.res) out+='<div>'+ICON.cal+'<span><b>Reserva</b>'+esc(x.res)+'</span></div>';
+  if (x.mar && !/No confirmado/.test(x.mar)) out+='<div>'+ICON.beach+'<span><b>Frente al mar</b>'+esc(x.mar)+'</span></div>';
+  if (x.ceia && !/No encontrada|Sin respuesta/.test(x.ceia)) out+='<div>'+ICON.food+'<span><b>Cena 24/12</b>'+esc(x.ceia)+'</span></div>';
+  return out;
 }
-function suggest(){
-  var msg = document.getElementById("s-msg");
-  var body = { action:"actadd", name:val("s-name"), cat:val("s-cat"), precio:val("s-precio"), rec:val("s-rec"), que:val("s-que"), link:val("s-link") };
-  if (!body.name) { msg.textContent = "Escribí un nombre."; return; }
-  if (body.link && !/^https?:\/\//.test(body.link)) { msg.textContent = "El link debe empezar con https://"; return; }
-  msg.textContent = "Enviando...";
-  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
-    .then(function(r){return r.json();}).then(function(d){
-      if (d.error) { msg.textContent = d.error; return; }
-      ["s-name","s-precio","s-rec","s-que","s-link"].forEach(function(i){ document.getElementById(i).value=""; });
-      state.custom = d.actcustom || state.custom; state.votes = d.actlikes || state.votes;
-      render(); msg.textContent = "¡Listo! Ya está para votar."; toast("Sugerencia agregada");
-    }).catch(function(){ msg.textContent = "No se pudo enviar."; });
+function catChip(x){
+  if (isFood(x)) {
+    var m = mealOf(x);
+    var txt = m==="ambos" ? "Almuerzo y cena" : (m==="almuerzo" ? "Almuerzo" : "Cena");
+    return '<span class="chip day">'+ICON.food+' '+txt+'</span>';
+  }
+  return '<span class="chip cat-'+esc(x.cat)+'">'+(CAT_ICON[x.cat]||"")+' '+esc(catLabel(x.cat))+'</span>';
 }
-function val(id){ return document.getElementById(id).value.trim(); }
+
+function renderGrid(){
+  var list = filtered();
+  document.getElementById("grid").innerHTML = list.map(function(x){
+    var liked = state.liked.indexOf(x.id)!==-1;
+    var btns = DAYS.map(function(d){
+      var done = state.mineDays.indexOf(x.id+"|"+d)!==-1;
+      return '<button class="dbtn'+(done?' done':'')+'" data-dayvote="'+esc(x.id)+'" data-day="'+d+'" title="'+(done?'Quitar mi voto':'Votar para el '+d)+'">'+d+' · '+dv(x.id,d)+(done?' ✕':'')+'</button>';
+    }).join("");
+    var photo = x.img
+      ? '<img class="photo-img" src="'+esc(x.img)+'" alt="'+esc(x.name)+'" loading="lazy">'
+      : '<div class="photo-ph"><div class="ph-ico">'+(CAT_ICON[x.cat]||ICON.camera)+'</div><b>'+esc(x.name)+'</b><a href="'+esc(x.foto||"#")+'" target="_blank" rel="noopener">'+ICON.camera+' Ver fotos</a></div>';
+    var webBtn = x.web ? '<a class="ibtn" href="'+esc(x.web)+'" target="_blank" rel="noopener" title="Sitio web">'+ICON.globe+'</a>' : '';
+    var igBtn = x.ig ? '<a class="ibtn ig" href="'+esc(x.ig)+'" target="_blank" rel="noopener" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>' : x.igq ? '<a class="ibtn ig" href="https://www.instagram.com/explore/search/keyword/?q='+encodeURIComponent(x.igq)+'" target="_blank" rel="noopener" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>' : '';
+    return '<article class="card" id="'+esc(x.id)+'">'
+      + '<div class="chips">'+catChip(x)+'</div>'
+      + photo
+      + '<h3>'+esc(x.name)+'</h3>'
+      + '<div class="facts"><div>'+ICON.pin+'<span><b>Distancia</b>'+esc(x.dist||"Por confirmar")+'</span></div><div>'+ICON.tag+'<span><b>Precio</b>'+esc(x.precio||"Consultar")+'</span></div>'
+      + (isFood(x) ? extraFacts(x) : '')
+      + '</div>'
+      + (x.rec ? '<p class="rec ico">'+ICON.users+'<span>'+esc(x.rec)+'</span></p>' : '')
+      + '<p class="desc">'+esc(x.que||"")+'</p>'
+      + '<div class="dayrow"><span class="dlabel">'+ICON.cal+' Día</span>'+btns+'</div>'
+      + '<div class="iconrow" style="border-top:1px solid var(--line);padding-top:12px">'
+      +   '<button class="ibtn'+(liked?' on':'')+'" data-like="'+esc(x.id)+'" title="'+(liked?'Quitar mi me gusta':'Me gusta')+'">'+ICON.heart+'</button>'
+      +   '<span class="likecount">'+lv(x.id)+'</span>'
+      +   '<button class="ibtn" data-share="'+esc(x.id)+'" title="Compartir">'+ICON.share+'</button>'
+      +   '<a class="ibtn" href="/item?id='+encodeURIComponent(x.id)+'" title="Ver detalle">'+ICON.link+'</a>'
+      +   webBtn + igBtn
+      + '</div>'
+      + '</article>';
+  }).join("");
+}
+
+function render(){ renderCalendar(); renderGrid(); }
+
+function dayVote(id,d,btn){
+  var key=id+"|"+d;
+  var undo = state.mineDays.indexOf(key)!==-1;
+  btn.disabled=true;
+  var action = undo ? "undayvote" : "dayvote";
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:action,id:id,day:d})})
+    .then(function(r){ return r.json(); }).then(function(res){
+      if (undo) { state.mineDays = state.mineDays.filter(function(k){ return k!==key; }); }
+      else { state.mineDays.push(key); }
+      setJSON("dayvoted-v1",state.mineDays);
+      state.dayvotes = res.dayvotes || state.dayvotes; render();
+      toast(undo ? "Voto quitado del "+d : "Voto registrado para el "+d);
+    }).catch(function(){ btn.disabled=false; toast("No se pudo registrar el cambio"); });
+}
+function likeItem(id,btn){
+  var undo = state.liked.indexOf(id)!==-1;
+  btn.disabled=true;
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:undo?"unactlike":"actlike",id:id})})
+    .then(function(r){ return r.json(); }).then(function(res){
+      if (undo) { state.liked = state.liked.filter(function(x){ return x!==id; }); }
+      else { state.liked.push(id); }
+      setJSON("actliked-v1",state.liked);
+      state.votes = res.actlikes || state.votes; render();
+      toast(undo ? "Me gusta quitado" : "¡Gracias por votar!");
+    }).catch(function(){ btn.disabled=false; toast("No se pudo registrar el cambio"); });
+}
 
 document.getElementById("cat-seg").addEventListener("click", function(e){
-  var b = e.target.closest("button[data-cat]"); if(!b) return;
-  state.cat = b.getAttribute("data-cat");
+  var b=e.target.closest("button[data-f]"); if(!b) return;
+  state.f=b.getAttribute("data-f");
   document.querySelectorAll("#cat-seg button").forEach(function(x){ x.classList.toggle("on", x===b); });
-  render();
+  renderGrid();
 });
-document.getElementById("sort-sel").addEventListener("change", function(e){ state.sort = e.target.value; render(); });
-document.getElementById("s-btn").addEventListener("click", suggest);
+document.getElementById("sort").addEventListener("change", function(e){ state.sort=e.target.value; renderGrid(); });
 document.getElementById("grid").addEventListener("click", function(e){
-  var v = e.target.closest("[data-vote]"); if (v) { vote(v.getAttribute("data-vote"), v); return; }
-  var dd = e.target.closest("[data-dayvote]"); if (dd) { dayVote(dd.getAttribute("data-dayvote"), Number(dd.getAttribute("data-day")), dd); return; }
-  var s = e.target.closest("[data-share]"); if (s) {
-    var a = all().filter(function(x){return x.id===s.getAttribute("data-share");})[0];
-    if (a) shareLink(a.id, a.name);
-  }
+  var dd=e.target.closest("[data-dayvote]"); if(dd){ dayVote(dd.getAttribute("data-dayvote"), Number(dd.getAttribute("data-day")), dd); return; }
+  var lk=e.target.closest("[data-like]"); if(lk){ likeItem(lk.getAttribute("data-like"), lk); return; }
+  var sh=e.target.closest("[data-share]"); if(sh){ shareLink(sh.getAttribute("data-share"), sh.getAttribute("data-share")); }
 });
-function focusHash(){
-  var id = decodeURIComponent((location.hash||"").replace(/^#/,""));
-  var el = id && document.getElementById(id);
-  if (!el) return;
-  el.classList.add("hl");
-  setTimeout(function(){ el.scrollIntoView({behavior:"smooth", block:"center"}); }, 100);
-}
+
+document.getElementById("f-send").addEventListener("click", function(){
+  var msg=document.getElementById("f-msg"); var btn=this;
+  var body={action:"actadd", name:document.getElementById("f-name").value, cat:document.getElementById("f-cat").value==="comida"?"atraccion":document.getElementById("f-cat").value,
+    precio:document.getElementById("f-precio").value, rec:document.getElementById("f-rec").value, que:document.getElementById("f-que").value, link:document.getElementById("f-link").value};
+  if(!body.name.trim()){ msg.textContent="Falta el nombre."; return; }
+  btn.disabled=true; msg.textContent="Enviando...";
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      btn.disabled=false;
+      if(!res.ok){ msg.textContent=res.j.error||"No se pudo enviar."; return; }
+      state.actcustom=res.j.actcustom||state.actcustom; state.dayvotes=res.j.dayvotes||state.dayvotes; state.votes=res.j.actlikes||state.votes;
+      ["f-name","f-precio","f-rec","f-que","f-link"].forEach(function(id){ document.getElementById(id).value=""; });
+      msg.textContent="Sugerencia agregada. Ya podés votarla.";
+      render();
+    }).catch(function(){ btn.disabled=false; msg.textContent="Error de conexión."; });
+});
+
 render();
-fetch(API).then(function(r){return r.json();}).then(function(d){
-  state.votes = d.actlikes || {}; state.dayvotes = d.dayvotes || {}; state.custom = d.actcustom || []; render(); focusHash();
+document.querySelectorAll(".viewtabs button").forEach(function(b){
+  b.addEventListener("click",function(){
+    var v=b.getAttribute("data-view");
+    document.querySelectorAll(".viewtabs button").forEach(function(x){ x.classList.toggle("on", x===b); });
+    document.getElementById("view-cal").hidden = v!=="cal";
+    document.getElementById("view-opt").hidden = v!=="opt";
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+
+fetch(API).then(function(r){ return r.json(); }).then(function(d){
+  state.dayvotes=d.dayvotes||{}; state.votes=d.actlikes||{}; state.actcustom=d.actcustom||[];
+  render();
+  if (location.hash) { var el=document.getElementById(location.hash.slice(1).split(/\s+/)[0]); if(el) el.scrollIntoView({behavior:"smooth"}); }
 }).catch(function(){ toast("No se pudieron cargar los votos"); });
-window.addEventListener("hashchange", focusHash);
 </script>
 </body>
 </html>
