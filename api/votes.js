@@ -1,7 +1,7 @@
 // Vercel Serverless Function: likes compartidos + sugerencias (Upstash Redis via REST)
 const URL_ENV = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || process.env.STORAGE_REST_API_URL || process.env.STORAGE_URL;
 const TOKEN_ENV = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || process.env.STORAGE_REST_API_TOKEN || process.env.STORAGE_TOKEN;
-const ALLOWED = new Set(["laghetto","windsor","peregrino","picanha","fratelli","granparrilla","toca","riobrasa","fogo","mocellin","bangalo"]);
+const ALLOWED = new Set(["laghetto","windsor","peregrino","picanha","fratelli","granparrilla","toca","riobrasa","fogo","mocellin","bangalo","radisson"]);
 
 async function cmd(arr) {
   const r = await fetch(URL_ENV, {
@@ -13,6 +13,8 @@ async function cmd(arr) {
   if (j.error) throw new Error(j.error);
   return j.result;
 }
+
+const ACT_ALLOWED = new Set(["d25-barra","d25-prainha","d26-cristo","d27-pao","d28-buzios","d28-paraty","d29-ilha"]);
 
 const TOKEN_ADMIN = process.env.ADMIN_TOKEN;
 
@@ -28,8 +30,11 @@ async function state() {
   for (let i = 0; i < hall.length; i += 2) likes[hall[i]] = Number(hall[i + 1]);
   const raw = (await cmd(["LRANGE", "custom", 0, -1])) || [];
   const custom = raw.map((s) => { try { return JSON.parse(s); } catch { return null; } }).filter(Boolean);
+  const ah = (await cmd(["HGETALL", "actvotes"])) || [];
+  const actlikes = {};
+  for (let i = 0; i < ah.length; i += 2) actlikes[ah[i]] = Number(ah[i + 1]);
   const content = await getContent();
-  return { likes, custom, content };
+  return { likes, custom, content, actlikes };
 }
 
 const clean = (s, max) => String(s || "").replace(/[<>]/g, "").trim().slice(0, max);
@@ -44,6 +49,11 @@ module.exports = async (req, res) => {
     if (body.action === "like") {
       if (!ALLOWED.has(body.id)) return res.status(400).json({ error: "Opción inválida" });
       await cmd(["HINCRBY", "votes", body.id, 1]);
+      return res.status(200).json(await state());
+    }
+    if (body.action === "actlike") {
+      if (!ACT_ALLOWED.has(body.id)) return res.status(400).json({ error: "Actividad inválida" });
+      await cmd(["HINCRBY", "actvotes", body.id, 1]);
       return res.status(200).json(await state());
     }
     if (body.action === "add") {
