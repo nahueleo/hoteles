@@ -63,6 +63,12 @@ module.exports = async (req, res) => {
       await cmd(["HINCRBY", "actvotes", body.id, 1]);
       return res.status(200).json(await state());
     }
+    if (body.action === "unactlike") {
+      if (!isAct(body.id)) return res.status(400).json({ error: "Actividad inválida" });
+      const v = await cmd(["HINCRBY", "actvotes", body.id, -1]);
+      if (Number(v) < 0) await cmd(["HSET", "actvotes", body.id, 0]);
+      return res.status(200).json(await state());
+    }
     if (body.action === "actadd") {
       const name = clean(body.name, 80);
       if (!name) return res.status(400).json({ error: "Falta el nombre" });
@@ -80,6 +86,14 @@ module.exports = async (req, res) => {
       const day = Number(body.day);
       if (!isAct(body.id) || ![26, 27, 28, 29].includes(day)) return res.status(400).json({ error: "Opción inválida" });
       await cmd(["HINCRBY", "dayvotes", body.id + "|" + day, 1]);
+      return res.status(200).json(await state());
+    }
+    if (body.action === "undayvote") {
+      const day = Number(body.day);
+      if (!isAct(body.id) || ![26, 27, 28, 29].includes(day)) return res.status(400).json({ error: "Opción inválida" });
+      const key = body.id + "|" + day;
+      const v = await cmd(["HINCRBY", "dayvotes", key, -1]);
+      if (Number(v) < 0) await cmd(["HSET", "dayvotes", key, 0]);
       return res.status(200).json(await state());
     }
     if (body.action === "add") {
