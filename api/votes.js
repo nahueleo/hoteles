@@ -15,7 +15,8 @@ async function cmd(arr) {
 }
 
 const ACT_ALLOWED = new Set(["d25-barra","d25-prainha","d26-cristo","d27-pao","d28-buzios","d28-paraty","d29-ilha"]);
-const isAct = (id) => ACT_ALLOWED.has(id) || /^u-[a-z0-9]{6,24}$/.test(String(id));
+const FOOD_ALLOWED = new Set(["laghetto", "windsor", "radisson", "peregrino", "mocellin", "riobrasa", "picanha", "fratelli", "granparrilla", "toca", "fogo", "bangalo", "f-hotel-almuerzo", "f-gran-especial"]);
+const isAct = (id) => ACT_ALLOWED.has(id) || FOOD_ALLOWED.has(id) || /^u-[a-z0-9]{6,24}$/.test(String(id)) || /^p-[a-z]{4,12}$/.test(String(id));
 
 const TOKEN_ADMIN = process.env.ADMIN_TOKEN;
 
