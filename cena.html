@@ -375,6 +375,7 @@ function setView(v){
 }
 function initMap(){
   if (MAP || typeof L === "undefined") return;
+  DATA.forEach(function(r){ if (r.geo && !(r.id in GEO)) GEO[r.id] = r.geo; });
   MAP = L.map("map").setView([-23.0, -43.36], 13);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"© OpenStreetMap"}).addTo(MAP);
   MARKERS = L.layerGroup().addTo(MAP);
