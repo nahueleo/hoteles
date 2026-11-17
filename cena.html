@@ -31,6 +31,7 @@
   .ibtn.ig{color:#c13584;border-color:#f0c6dd}
   .ibtn.ig:hover{background:#fdf0f7}
   .reserva{font-size:.84rem;color:var(--muted);margin-top:8px}
+  td.det{font-size:.84rem;min-width:260px;max-width:340px}
   .map{margin-top:10px;font-size:.86rem}
   .map iframe{width:100%;height:220px;border:0;border-radius:12px;margin-top:8px}
   .tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
@@ -125,6 +126,7 @@
         <th data-k="g">Google ★</th>
         <th data-k="cena">Cena 24</th>
         <th data-k="total">Total 15 pers.</th>
+        <th>Incluye / no incluye · Reserva</th>
         <th data-k="votes">Votos</th>
         <th data-k="score">Puntaje</th>
       </tr></thead>
@@ -280,7 +282,7 @@ function renderTable(rows){
     var rank = byScore.findIndex(function(x){return x.id===r.id;})+1;
     return '<tr class="'+(rank===1?'top':'')+(r.d.estado==='descartado'?' descartado':'')+'"><td>'+rank+'</td><td><b><a class="lnk" href="/item?id='+encodeURIComponent(r.id)+'">'+esc(r.name)+'</a></b><br><span class="note">'+esc(r.d.tipo)+'</span></td>'
       + '<td class="num">'+fmtPrecio(r)+'</td><td class="num">'+fmtKm(r)+'</td><td class="num">'+(r.g==null?'—':r.g.toFixed(1)+' ★')+'</td>'
-      + '<td>'+(r.d.estado==="descartado"?'<span class="badge" style="background:#e5e7eb;color:#4b5563">✕ Descartado</span>':(r.d.estado==="consultado"?'<span class="badge est">Consultado, sin respuesta</span>':(r.d.cena==="ok"?'<span class="badge">✓ Confirmada</span>':'<span class="badge est">Sin respuesta aún</span>')))+'</td><td class="num">'+(r.d.total==null?'—':'R$ '+r.d.total.toLocaleString("es-AR")+(r.d.totalest?' (est.)':''))+'</td><td class="num">'+r.votes+'</td><td class="num score">'+r.score.toFixed(0)+'</td></tr>';
+      + '<td>'+(r.d.estado==="descartado"?'<span class="badge" style="background:#e5e7eb;color:#4b5563">✕ Descartado</span>':(r.d.estado==="consultado"?'<span class="badge est">Consultado, sin respuesta</span>':(r.d.cena==="ok"?'<span class="badge">✓ Confirmada</span>':'<span class="badge est">Sin respuesta aún</span>')))+'</td><td class="num">'+(r.d.total==null?'—':'R$ '+r.d.total.toLocaleString("es-AR")+(r.d.totalest?' (est.)':''))+'</td><td class="det">'+esc(r.d.incl||'—')+'<br><span class="reserva">Reserva: '+esc(r.d.res||'—')+'</span></td><td class="num">'+r.votes+'</td><td class="num score">'+r.score.toFixed(0)+'</td></tr>';
   }).join("");
 }
 
