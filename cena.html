@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nochebuena en Barra da Tijuca · 24/12/2026</title>
 <link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
   /* compat for restaurant cards and table, aligned to the site palette */
   main.wrap{max-width:1120px;margin:0 auto;padding:24px 18px 60px}
@@ -32,6 +33,11 @@
   .ibtn.ig:hover{background:#fdf0f7}
   .reserva{font-size:.84rem;color:var(--muted);margin-top:8px}
   td.det{font-size:.84rem;min-width:260px;max-width:340px}
+  .viewtog{display:inline-flex;margin:0 0 10px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+  .viewtog button{border:0;background:#fff;padding:8px 16px;font:inherit;font-weight:600;font-size:.85rem;cursor:pointer;color:var(--ink)}
+  .viewtog button.on{background:var(--brand);color:#fff}
+  #map{height:560px;border-radius:12px;border:1px solid var(--line)}
+  .mapdet h3{margin:0 0 6px}.mapdet p{margin:6px 0;font-size:.92rem}
   .map{margin-top:10px;font-size:.86rem}
   .map iframe{width:100%;height:220px;border:0;border-radius:12px;margin-top:8px}
   .tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
@@ -116,7 +122,14 @@
       </select>
     </div>
   </div>
-  <div class="tablewrap">
+  <div class="viewtog">
+    <button id="v-grid" class="on">Grilla</button><button id="v-map">Mapa</button>
+  </div>
+  <div id="map-wrap" style="display:none">
+    <div id="map"></div>
+    <p class="note" id="map-status">Ubicando lugares en el mapa…</p>
+  </div>
+  <div id="grid-wrap"><div class="tablewrap">
     <table>
       <thead><tr>
         <th data-k="rank">#</th>
@@ -132,7 +145,7 @@
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
-  </div>
+  </div></div>
   <p class="note">Total grupo = 8 adultos, 1 de 15 años (precio de adulto donde aplica) y 6 niños (6, 7, 8, 9, 9 y 10 años); el de 4 años es cortesía en la mayoría. Precios marcados como "est." son estimaciones por nivel de precio (no tienen cifra publicada). Distancia en auto desde el Laghetto Stilo Barra.</p>
 </section>
 
@@ -170,6 +183,7 @@
 <footer class="footer">Datos recopilados el 16/11/2026 desde Google, webs oficiales, Sympla, Instagram y WhatsApp.</footer>
 
 <script src="/js/data.js?v=3"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 var API = "/api/votes";
 var ACT_LIKED_KEY = "actliked-v1";
@@ -347,11 +361,87 @@ function initTipoFilter(){
   DATA.forEach(function(d){ if (tipos.indexOf(d.tipo)===-1) tipos.push(d.tipo); });
   sel.innerHTML = '<option value="all">Todos</option>' + tipos.map(function(t){ return '<option value="'+esc(t)+'">'+esc(t)+'</option>'; }).join("");
 }
+
+var MAP = null, MARKERS = null, GEO = {}, GEO_BUSY = false, MAP_ROWS = [];
+function setView(v){
+  var isMap = v==="map";
+  document.getElementById("grid-wrap").style.display = isMap ? "none" : "";
+  document.getElementById("map-wrap").style.display = isMap ? "" : "none";
+  document.getElementById("v-grid").classList.toggle("on", !isMap);
+  document.getElementById("v-map").classList.toggle("on", isMap);
+  if (isMap) { initMap(); setTimeout(function(){ MAP.invalidateSize(); renderMapRows(MAP_ROWS); geocodeNext(); }, 50); }
+}
+function initMap(){
+  if (MAP || typeof L === "undefined") return;
+  MAP = L.map("map").setView([-23.0, -43.36], 13);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"© OpenStreetMap"}).addTo(MAP);
+  MARKERS = L.layerGroup().addTo(MAP);
+}
+function geocodeNext(){
+  if (GEO_BUSY) return;
+  var pending = DATA.filter(function(r){ return r.q && !(r.id in GEO); });
+  var status = document.getElementById("map-status");
+  if (!pending.length) { status.textContent = "Mapa listo. Tocá un marcador para ver el detalle."; return; }
+  GEO_BUSY = true;
+  var r = pending[0];
+  status.textContent = "Ubicando lugares en el mapa… (" + (DATA.length - pending.length) + "/" + DATA.length + ")";
+  fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" + encodeURIComponent(r.q))
+    .then(function(x){ return x.json(); })
+    .then(function(j){ GEO[r.id] = j && j[0] ? [+j[0].lat, +j[0].lon] : null; })
+    .catch(function(){ GEO[r.id] = null; })
+    .then(function(){
+      GEO_BUSY = false;
+      renderMapRows(MAP_ROWS);
+      setTimeout(geocodeNext, 1100);
+    });
+}
+function renderMapRows(rows){
+  MAP_ROWS = rows;
+  if (!MAP || !MARKERS) return;
+  MARKERS.clearLayers();
+  var pts = [];
+  rows.forEach(function(r){
+    var g = GEO[r.id]; if (!g) return;
+    var color = r.d.estado==="descartado" ? "#9ca3af" : (r.d.cena==="ok" ? "#1f7a5c" : "#c2410c");
+    var m = L.circleMarker(g, {radius:10, color:"#fff", weight:2, fillColor:color, fillOpacity:1});
+    m.bindTooltip(esc(r.name), {direction:"top"});
+    m.on("click", function(){ showDetail(r.id); });
+    m.addTo(MARKERS);
+    pts.push(g);
+  });
+  if (pts.length && !renderMapRows._fit) { MAP.fitBounds(pts, {padding:[30,30]}); renderMapRows._fit = true; }
+}
+function showDetail(id){
+  var r = DATA.filter(function(x){ return x.id===id; })[0]; if (!r) return;
+  var cena = r.cena==="ok" ? '<span class="badge">✓ Confirmada</span>' : '<span class="badge est">Sin confirmar</span>';
+  var estado = r.estado==="descartado" ? ' <span class="badge" style="background:#e5e7eb;color:#4b5563">✕ Descartado</span>' : (r.estado==="consultado" ? ' <span class="badge est">Consultado</span>' : '');
+  var html = '<div class="mapdet">'
+    + '<h3>'+esc(r.name)+'</h3>'
+    + '<p class="meta">'+esc(r.tipo)+' · '+fmtKm({km:r.km})+(r.g!=null?' · Google '+r.g.toFixed(1)+' ★':'')+'</p>'
+    + '<p><b>Precio pp:</b> '+(r.precio==null?'no verificado':'R$ '+r.precio.toLocaleString("es-AR")+(r.est?' (est.)':''))+' '+estado+'</p>'
+    + '<p><b>Total grupo (15):</b> '+(r.total==null?'no verificado':'R$ '+r.total.toLocaleString("es-AR")+(r.totalest?' (est.)':''))+' <span class="note">'+esc(r.totaltxt||'')+'</span></p>'
+    + '<p><b>Cena 24:</b> '+cena+' '+esc(r.ceia||'')+'</p>'
+    + '<p><b>Incluye / no incluye:</b> '+esc(r.incl||'—')+'</p>'
+    + '<p><b>Niños:</b> '+esc(r.kids||'—')+' · <b>Vista al mar:</b> '+esc(r.mar||'—')+'</p>'
+    + '<p class="reserva"><b>Forma de reserva:</b> '+esc(r.res||'—')+'</p>'
+    + (r.note ? '<p class="note">'+esc(r.note)+'</p>' : '')
+    + '<div class="row">'
+    + (r.ig ? '<a class="btn alt" href="'+esc(r.ig)+'" target="_blank" rel="noopener">Instagram</a>' : '')
+    + (r.src ? '<a class="btn alt" href="'+esc(r.src)+'" target="_blank" rel="noopener">Fuente</a>' : '')
+    + '<a class="btn" href="/item?id='+encodeURIComponent(r.id)+'">Ver ficha</a>'
+    + '</div></div>';
+  document.getElementById("modal-body").innerHTML = html;
+  document.getElementById("modal").classList.add("open");
+}
+document.getElementById("v-grid").addEventListener("click", function(){ setView("grid"); });
+document.getElementById("v-map").addEventListener("click", function(){ setView("map"); });
+
 function renderAll(){
   var rows = computeRows();
   renderWinners(rows);
   renderTable(visibleRows(rows));
   renderCards(visibleRows(rows));
+  renderMapRows(visibleRows(rows));
 }
 
 function like(id, btn){
