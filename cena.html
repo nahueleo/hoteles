@@ -409,7 +409,7 @@ function renderMapRows(rows){
     m.addTo(MARKERS);
     pts.push(g);
   });
-  if (pts.length && !renderMapRows._fit) { MAP.fitBounds(pts, {padding:[30,30]}); renderMapRows._fit = true; }
+  if (pts.length && pts.length !== renderMapRows._n) { MAP.fitBounds(pts, {padding:[30,30]}); renderMapRows._n = pts.length; }
 }
 function showDetail(id){
   var r = DATA.filter(function(x){ return x.id===id; })[0]; if (!r) return;
